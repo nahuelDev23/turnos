@@ -22,22 +22,26 @@ export default function handler(
 }
 
 const getTurnByDate = async (day: Date) => {
-  const turn = await Turn.find({ day });
+  const turn = await Turn.find({ day: new Date(day) });
 
-  return turn;
+  const x = turn.filter(
+    (item) => item.day.toString() === new Date(day).toString(),
+  );
+
+  return x;
 };
 const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const { hour } = JSON.parse(req.body);
+  const { hour, day } = JSON.parse(req.body);
 
   try {
     await db.connect();
     const hourAvalive = ["10:00:00", "12:00:00", "14:00:00"];
 
-    const turnInDay = await getTurnByDate(req.body.day);
+    const turnInDay = await getTurnByDate(day);
+
+    console.log("eki2", turnInDay);
 
     if (turnInDay.length === hourAvalive.length) {
-      console.log(turnInDay.length);
-
       throw new Error("No hay mas turnos disponibles ese dia");
     }
 
@@ -47,9 +51,9 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       throw new Error("Ese horario ya fue tomado para este dia");
     }
 
-    // console.log(turnInDay);
     const turn = new Turn(JSON.parse(req.body));
 
+    turn.day = day.toString().slice(0, 10);
     await turn.save();
 
     await db.disconnect();

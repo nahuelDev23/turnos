@@ -28,30 +28,23 @@ interface Props {
   turns: ITurnForm[];
 }
 const Home: FC<Props> = ({ turns }) => {
-  const [startDate, setStartDate] = useState(new Date());
+  // const [startDate, setStartDate] = useState(new Date());
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
   const [form, setForm] = useState<ITurnForm>({
     name: "",
     dni: "",
     phone: "",
     hour: "",
-    day: startDate,
+    day: new Date(),
   });
 
-  const { name, dni, phone, hour } = form;
+  const { name, dni, phone, hour, day } = form;
 
-  const isWeekday = (date: Date) => {
-    const day = date.getDay();
+  // const isWeekday = (date: Date) => {
+  //   const day = date.getDay();
 
-    return day !== 0 && day !== 6;
-  };
-
-  useEffect(() => {
-    setForm({
-      ...form,
-      day: startDate,
-    });
-  }, [startDate]);
+  //   return day !== 0 && day !== 6;
+  // };
 
   useEffect(() => {
     setTurnViews(turns);
@@ -67,7 +60,7 @@ const Home: FC<Props> = ({ turns }) => {
 
       const data = await res.json();
 
-      console.log(data.status);
+      console.log(form);
 
       if (data.status !== 200) {
         throw new Error(data.message);
@@ -120,7 +113,15 @@ const Home: FC<Props> = ({ turns }) => {
               onInputChange(e);
             }}
           />
-
+          <Input
+            name="day"
+            placeholder="day"
+            type="date"
+            value={day}
+            onChange={(e) => {
+              onInputChange(e);
+            }}
+          />
           <Select
             id="hour"
             name="hour"
@@ -144,13 +145,13 @@ const Home: FC<Props> = ({ turns }) => {
 
           <Button type="submit">Reservar</Button>
         </form>
-        <Stack color="black">
+        {/* <Stack color="black">
           <DatePicker
             filterDate={isWeekday}
             selected={startDate}
             onChange={(date: Date) => setStartDate(date)}
           />
-        </Stack>
+        </Stack> */}
 
         <Table overflow="scroll" size="sm">
           <Thead>
