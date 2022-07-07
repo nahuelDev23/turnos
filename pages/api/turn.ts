@@ -48,7 +48,10 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const hourAlreadyToken = turnInDay.some((item) => item.hour.includes(hour));
 
     if (hourAlreadyToken) {
-      throw new Error("Ese horario ya fue tomado para este dia");
+      // throw new Error("Ese horario ya fue tomado para este dia");
+      return res.status(400).json({
+        message: "Ese horario ya fue tomado para este dia",
+      });
     }
 
     const turn = new Turn(JSON.parse(req.body));
@@ -60,7 +63,7 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     return res.status(200).json({
       message: "El turno se reservo con exito",
-      // turn,
+      turn,
     });
   } catch (error: any) {
     return res.status(400).json({

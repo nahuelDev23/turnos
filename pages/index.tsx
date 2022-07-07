@@ -30,6 +30,8 @@ interface Props {
 const Home: FC<Props> = ({ turns }) => {
   // const [startDate, setStartDate] = useState(new Date());
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
+  const [error, setError] = useState<string>("");
+
   const [form, setForm] = useState<ITurnForm>({
     name: "",
     dni: "",
@@ -50,28 +52,27 @@ const Home: FC<Props> = ({ turns }) => {
     setTurnViews(turns);
   }, []);
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch("/api/turn", {
-        method: "POST",
-        body: JSON.stringify(form),
+
+    fetch("/api/turn", {
+      method: "POST",
+      body: JSON.stringify(form),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.turn);
+        // if (data.status !== 200) {
+        //   throw new Error(data.message);
+        // }
+
+        setTurnViews((prev) => {
+          return [...prev, data.turn];
+        });
+      })
+      .catch((err) => {
+        setError(err.message);
       });
-
-      const data = await res.json();
-
-      console.log(form);
-
-      if (data.status !== 200) {
-        throw new Error(data.message);
-      }
-
-      setTurnViews((prev) => {
-        return [...prev, form];
-      });
-    } catch (error: any) {
-      console.log(error);
-    }
   };
 
   const onInputChange = (e: any) => {
@@ -84,7 +85,7 @@ const Home: FC<Props> = ({ turns }) => {
     <PublicLayout>
       <>
         <Heading>joder</Heading>
-
+        {error && error}
         <form onSubmit={onSubmit}>
           <Input
             name="name"
