@@ -15,7 +15,7 @@ const themeBase = extendTheme({
   styles: {
     global: (props: any) => ({
       body: {
-        bg: mode("red.200", "blue.400")(props),
+        bg: mode("gray.400", "gray.700")(props),
       },
       fonts: {
         // heading: "inconsolata",
