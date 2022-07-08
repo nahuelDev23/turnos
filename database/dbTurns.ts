@@ -8,8 +8,6 @@ export const getAllTurns = async (): Promise<ITurnDB[]> => {
 
   const turns = await Turn.find().sort({ createdAt: "desc" }).lean();
 
-  console.log(turns);
-
   await db.disconnect();
 
   return JSON.parse(JSON.stringify(turns));

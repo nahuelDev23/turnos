@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import moment from "moment";
+
 import { Turn } from "../../models";
 import { db } from "../../database";
 import { ITurnForm } from "../../interface/ITurn";
-
 type Data = {
   ok: boolean;
   message: string;
@@ -39,7 +40,9 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.connect();
     const hourAvalive = ["10:00:00", "12:00:00", "14:00:00"];
 
-    const turnInDay = await getTurnByDate(day);
+    const pickerDate = new Date(moment(day).utc().format("YYYY-MM-DD"));
+
+    const turnInDay = await getTurnByDate(pickerDate);
 
     if (turnInDay.length === hourAvalive.length) {
       throw new Error("No hay mas turnos disponibles ese dia");
@@ -53,7 +56,7 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const turn = new Turn(JSON.parse(req.body));
 
-    turn.day = day.toString().slice(0, 10);
+    turn.day = pickerDate;
     await turn.save();
 
     await db.disconnect();
