@@ -1,22 +1,21 @@
 import type { GetServerSideProps } from "next";
 
 // eslint-disable-next-line import/order
-import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
-  Heading,
   Input,
   Button,
   Select,
-  Stack,
   Table,
   Thead,
   Tr,
   Th,
   Tbody,
   Td,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
 import { FC, FormEvent, useEffect, useState } from "react";
 
@@ -28,9 +27,9 @@ interface Props {
   turns: ITurnForm[];
 }
 const Home: FC<Props> = ({ turns }) => {
-  // const [startDate, setStartDate] = useState(new Date());
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string | null>("");
+  const [success, setSuccess] = useState<string | null>("");
 
   const [form, setForm] = useState<ITurnForm>({
     name: "",
@@ -61,16 +60,18 @@ const Home: FC<Props> = ({ turns }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.turn);
-        // if (data.status !== 200) {
-        //   throw new Error(data.message);
-        // }
-
+        if (!data.ok) {
+          throw new Error(data.message);
+        }
+        setSuccess(data.message);
+        setError(null);
         setTurnViews((prev) => {
           return [...prev, data.turn];
         });
       })
       .catch((err) => {
+        console.log(err);
+        setSuccess(null);
         setError(err.message);
       });
   };
@@ -84,8 +85,16 @@ const Home: FC<Props> = ({ turns }) => {
   return (
     <PublicLayout>
       <>
-        <Heading>joder</Heading>
-        {error && error}
+        {error && (
+          <Stack bgColor="red.300" borderRadius="md" my="4" p="4">
+            <Text color="red.800">{error}</Text>
+          </Stack>
+        )}
+        {success && (
+          <Stack bgColor="green.300" borderRadius="md" my="4" p="4">
+            <Text color="gray.800">{success}</Text>
+          </Stack>
+        )}
         <form onSubmit={onSubmit}>
           <Input
             name="name"
@@ -118,7 +127,7 @@ const Home: FC<Props> = ({ turns }) => {
             name="day"
             placeholder="day"
             type="date"
-            value={day}
+            value={day.toString()}
             onChange={(e) => {
               onInputChange(e);
             }}
@@ -137,7 +146,7 @@ const Home: FC<Props> = ({ turns }) => {
                 onInputChange(e);
               }}
             >
-              Elegi una hora
+              Elegí una hora
             </option>
             <option value="10:00:00">10:00:00</option>
             <option value="12:00:00">12:00:00</option>

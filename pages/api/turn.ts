@@ -1,11 +1,13 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { Turn } from "../../models";
 import { db } from "../../database";
+import { ITurnForm } from "../../interface/ITurn";
 
 type Data = {
+  ok: boolean;
   message: string;
+  turn?: ITurnForm;
 };
 
 export default function handler(
@@ -17,7 +19,7 @@ export default function handler(
       return postTurn(req, res);
 
     default:
-      return res.status(400).json({ message: "Bad request" });
+      return res.status(400).json({ ok: false, message: "Bad request" });
   }
 }
 
@@ -39,8 +41,6 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const turnInDay = await getTurnByDate(day);
 
-    console.log("eki2", turnInDay);
-
     if (turnInDay.length === hourAvalive.length) {
       throw new Error("No hay mas turnos disponibles ese dia");
     }
@@ -48,10 +48,7 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const hourAlreadyToken = turnInDay.some((item) => item.hour.includes(hour));
 
     if (hourAlreadyToken) {
-      // throw new Error("Ese horario ya fue tomado para este dia");
-      return res.status(400).json({
-        message: "Ese horario ya fue tomado para este dia",
-      });
+      throw new Error("Ese horario ya fue tomado para este dia");
     }
 
     const turn = new Turn(JSON.parse(req.body));
@@ -62,11 +59,13 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.disconnect();
 
     return res.status(200).json({
+      ok: true,
       message: "El turno se reservo con exito",
       turn,
     });
   } catch (error: any) {
     return res.status(400).json({
+      ok: false,
       message: error.message,
     });
   }
