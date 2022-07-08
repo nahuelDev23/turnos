@@ -40,27 +40,21 @@ const postAvailableDays = async (
 ) => {
   try {
     await db.connect();
-    // const currentAvailableInDb = await getAvailableDays();
-    // const currentAvailableDays = currentAvailableInDb.map((item) => item.day);
-    const x = [];
 
     // si req.body es vacio borro todo
-    hardCodedDays.forEach((element) => {
-      JSON.parse(req.body).forEach((body) => {
-        if (body.day.includes(element)) {
-          x.push(element);
-        }
-      });
+    const bodyDay = JSON.parse(req.body).map((item) => item.day);
+
+    const dayToDelete = hardCodedDays.filter((v) => !bodyDay.includes(v));
+
+    dayToDelete.forEach(async (day) => {
+      await AvailableDays.findOneAndDelete({ day });
     });
 
-    console.log("diff", x);
+    JSON.parse(req.body).forEach(async (element: any) => {
+      const availableDays = new AvailableDays(element);
 
-    // JSON.parse(req.body).forEach(async (element: any) => {
-
-    //   const availableDays = new AvailableDays(element);
-
-    //   await availableDays.save();
-    // });
+      await availableDays.save();
+    });
 
     await db.disconnect();
 
