@@ -24,8 +24,9 @@ export const DaysProvider: FC<Props> = ({ children }) => {
       (item) => item.day === data.day,
     );
 
-    // && data.hours.length === 1
-    if (data.hours[0].time === "") {
+    const hasAllHourEmpty = data.hours.every((item) => item.time === "");
+
+    if (hasAllHourEmpty) {
       const onlyFilledDataWitHours = state.formData.filter(
         (item) => item.day !== data.day,
       );
@@ -35,6 +36,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
         payload: [...onlyFilledDataWitHours],
       });
     }
+
     if (!dayAlreadyAssigned && data.hours.length !== 0) {
       return dispatch({
         type: "SET_FORM_DATA",
