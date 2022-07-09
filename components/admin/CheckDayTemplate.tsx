@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { FC, useContext, useState, useEffect } from "react";
+import { FC, useContext, useState, useEffect, useMemo } from "react";
 
 import { DaysContext } from "../../context/DaysContext";
 
@@ -43,12 +43,24 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
   const deleteStep = (e: any, i: number) => {
     const values = { ...formAvailableDays };
 
-    values.hours.pop();
+    values.hours.splice(i, 1);
     setFormAvailableDays(values);
   };
 
+  const computedPreviousHour = useMemo(() => {
+    const first =
+      formAvailableDays.hours.length === 1 &&
+      formAvailableDays.hours[0].time === "";
+    const second =
+      formAvailableDays.hours.length > 1 &&
+      formAvailableDays.hours[formAvailableDays.hours.length - 1].time === "";
+
+    return first || second;
+  }, [formAvailableDays]);
+
   useEffect(() => {
     addFormToFormData(formAvailableDays);
+    console.log(formAvailableDays);
   }, [formAvailableDays]);
 
   return (
@@ -69,19 +81,20 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
               value={el.time}
               onChange={(e) => handleChangeStep(e, i)}
             />
-            <div
+            <Button
               className="h-full py-2 px-4 bg-yellow-300 rounded-tr rounded-br mr-2"
+              disabled={computedPreviousHour}
               onClick={addStep}
             >
               +
-            </div>
+            </Button>
             {i > 0 && (
-              <div
+              <Button
                 className="h-full py-2 px-4 px-2  bg-red-300 text-black rounded"
-                onClick={deleteStep}
+                onClick={() => deleteStep(el, i)}
               >
                 -
-              </div>
+              </Button>
             )}
           </div>
         ))}
