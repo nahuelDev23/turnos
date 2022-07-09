@@ -9,8 +9,10 @@ interface Props {
 }
 
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
-  const { addFormToFormData } = useContext(DaysContext);
-
+  const { addFormToFormData, daysData } = useContext(DaysContext);
+  const { days: theDay } = daysData;
+  // desde el provider tener los valores de la db si coincide con el text llenar los hour
+  // todo hacer hooks de add inputs y todo eso
   const initialState = {
     day: text,
     hours: [{ time: "" }],
@@ -31,6 +33,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     setDay((isAvailable) => !isAvailable);
     setFormAvailableDays(initialState);
   };
+
   const addStep = (e: any) => {
     const values = { ...formAvailableDays };
 
@@ -60,8 +63,22 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
 
   useEffect(() => {
     addFormToFormData(formAvailableDays);
-    console.log(formAvailableDays);
+    console.log("se disparo");
   }, [formAvailableDays]);
+
+  useEffect(() => {
+    theDay &&
+      theDay.map((item) => {
+        if (item.day === text) {
+          console.log("item", item);
+          setDay(true);
+          setFormAvailableDays({
+            day: item.day,
+            hours: [...item.hours],
+          });
+        }
+      });
+  }, [theDay]);
 
   return (
     <>

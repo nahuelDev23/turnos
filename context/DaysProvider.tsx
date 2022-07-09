@@ -1,4 +1,4 @@
-import React, { FC, useReducer } from "react";
+import React, { FC, useReducer, useEffect } from "react";
 
 import { IDaysHours } from "../interface/IAvailableDays";
 
@@ -11,9 +11,11 @@ interface Props {
 
 export interface IDayInitialState {
   formData: IDaysHours[];
+  daysData: IDaysHours[];
 }
 const DAYINITIALSTATE: IDayInitialState = {
   formData: [],
+  daysData: [],
 };
 
 export const DaysProvider: FC<Props> = ({ children }) => {
@@ -58,6 +60,22 @@ export const DaysProvider: FC<Props> = ({ children }) => {
       payload: updateDays,
     });
   };
+
+  const getData = async () => {
+    const res = await fetch("/api/availableDays");
+    const data = await res.json();
+
+    if (data) {
+      dispatch({
+        type: "SET_DAYS_DATA",
+        payload: data,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const sendForm = () => {
     fetch("/api/availableDays", {

@@ -24,4 +24,5 @@ export type daysString =
 export interface IDaysHours {
   hours: IAvailableHours[];
   day: daysString;
+  days?: daysString; // todo arreglar esto qye sea day en todos lados
 }

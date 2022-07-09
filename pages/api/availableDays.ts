@@ -28,11 +28,29 @@ export default function handler(
   switch (req.method) {
     case "POST":
       return postAvailableDays(req, res);
+    case "GET":
+      return getDays(req, res);
 
     default:
       return res.status(400).json({ ok: false, message: "Bad request" });
   }
 }
+
+const getDays = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  try {
+    await db.connect();
+    const days = await AvailableDays.find();
+
+    await db.disconnect();
+
+    return res.status(200).json({ days });
+  } catch (error: any) {
+    return res.status(400).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+};
 
 const postAvailableDays = async (
   req: NextApiRequest,
