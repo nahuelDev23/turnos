@@ -41,36 +41,31 @@ const postAvailableDays = async (
   try {
     await db.connect();
 
-    const bodyDay = JSON.parse(req.body).map((item: any) => item.day);
-
-    const dayToDelete = hardCodedDays.filter((v) => !bodyDay.includes(v));
-
     const filter = JSON.parse(req.body).filter(
-      (item) => item.hours[0].time !== "" && item.hours.length === 1,
+      (item: IDaysHours) => item.hours[0].time !== "" && item.hours.length >= 1,
     );
 
-    console.log(filter);
+    const bodyDay = filter.map((item: any) => item.day);
+
+    const dayToDelete = hardCodedDays.filter((v) => !bodyDay.includes(v));
 
     dayToDelete.forEach(async (day) => {
       await AvailableDays.findOneAndDelete({ day });
     });
 
-    JSON.parse(req.body).forEach(async (element: any) => {
+    filter.forEach(async (element: any) => {
       await AvailableDays.findOneAndUpdate({ day: element.day }, element, {
         upsert: true,
       });
-      // const availableDays = new AvailableDays(element);
-
-      // await availableDays.save();
     });
 
     await db.disconnect();
 
-    // return res.status(200).json({
-    //   ok: true,
-    //   message: "El turno se configuro con exito",
-    //   // availableDays,
-    // });
+    return res.status(200).json({
+      ok: true,
+      message: "El turno se configuro con exito",
+      // availableDays,
+    });
   } catch (error: any) {
     return res.status(400).json({
       ok: false,

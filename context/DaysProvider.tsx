@@ -14,7 +14,6 @@ export interface IDayInitialState {
 }
 const DAYINITIALSTATE: IDayInitialState = {
   formData: [],
-  // addFormToFormData: (data: IDaysHours) => void;
 };
 
 export const DaysProvider: FC<Props> = ({ children }) => {
@@ -25,7 +24,18 @@ export const DaysProvider: FC<Props> = ({ children }) => {
       (item) => item.day === data.day,
     );
 
-    if (!dayAlreadyAssigned) {
+    // && data.hours.length === 1
+    if (data.hours[0].time === "") {
+      const onlyFilledDataWitHours = state.formData.filter(
+        (item) => item.day !== data.day,
+      );
+
+      return dispatch({
+        type: "SET_FORM_DATA",
+        payload: [...onlyFilledDataWitHours],
+      });
+    }
+    if (!dayAlreadyAssigned && data.hours.length !== 0) {
       return dispatch({
         type: "SET_FORM_DATA",
         payload: [...state.formData, data],
@@ -34,7 +44,9 @@ export const DaysProvider: FC<Props> = ({ children }) => {
 
     const updateDays = state.formData.map((item) => {
       if (item.day !== data.day) return item;
-      item.hours = data.hours;
+      const hoursFilled = data.hours.filter((hour) => hour.time !== "");
+
+      item.hours = hoursFilled;
 
       return item;
     });
