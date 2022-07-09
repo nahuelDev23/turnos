@@ -12,10 +12,12 @@ interface Props {
 export interface IDayInitialState {
   formData: IDaysHours[];
   daysData: IDaysHours[];
+  loading: boolean;
 }
 const DAYINITIALSTATE: IDayInitialState = {
   formData: [],
   daysData: [],
+  loading: true,
 };
 
 export const DaysProvider: FC<Props> = ({ children }) => {

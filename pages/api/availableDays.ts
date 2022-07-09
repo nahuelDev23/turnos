@@ -36,14 +36,14 @@ export default function handler(
   }
 }
 
-const getDays = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getDays = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
     await db.connect();
     const days = await AvailableDays.find();
 
     await db.disconnect();
 
-    return res.status(200).json({ days });
+    return res.status(200).json(days);
   } catch (error: any) {
     return res.status(400).json({
       ok: false,

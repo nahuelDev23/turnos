@@ -5,13 +5,11 @@ import { DaysContext } from "../../context/DaysContext";
 
 interface Props {
   text: string;
-  // onChange: () => void;
 }
 
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
-  const { addFormToFormData, daysData } = useContext(DaysContext);
-  const { days: theDay } = daysData;
-  // desde el provider tener los valores de la db si coincide con el text llenar los hour
+  const { addFormToFormData, daysData, loading } = useContext(DaysContext);
+
   // todo hacer hooks de add inputs y todo eso
   const initialState = {
     day: text,
@@ -20,7 +18,9 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
 
   const [formAvailableDays, setFormAvailableDays] = useState<any>(initialState);
 
-  const [day, setDay] = useState(formAvailableDays.hours[0].time !== "");
+  const [haveAtLastOneTime, setHaveAtLastOneTime] = useState(
+    formAvailableDays.hours[0].time !== "",
+  );
 
   const handleChangeStep = (e: any, i: number) => {
     const values = { ...formAvailableDays };
@@ -30,7 +30,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
   };
 
   const setDayAvailable = () => {
-    setDay((isAvailable) => !isAvailable);
+    setHaveAtLastOneTime((isAvailable) => !isAvailable);
     setFormAvailableDays(initialState);
   };
 
@@ -63,30 +63,31 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
 
   useEffect(() => {
     addFormToFormData(formAvailableDays);
-    console.log("se disparo");
   }, [formAvailableDays]);
 
   useEffect(() => {
-    theDay &&
-      theDay.map((item) => {
-        if (item.day === text) {
-          console.log("item", item);
-          setDay(true);
-          setFormAvailableDays({
-            day: item.day,
-            hours: [...item.hours],
-          });
-        }
-      });
-  }, [theDay]);
+    for (const item of daysData) {
+      if (item.day === text) {
+        setHaveAtLastOneTime(true);
+        setFormAvailableDays({
+          day: item.day,
+          hours: [...item.hours],
+        });
+      }
+    }
+  }, [daysData]);
 
   return (
     <>
-      <Button bgColor={day ? "green.600" : undefined} onClick={setDayAvailable}>
+      <Button
+        bgColor={haveAtLastOneTime ? "green.600" : undefined}
+        disabled={loading}
+        onClick={setDayAvailable}
+      >
         {text}
       </Button>
 
-      {day &&
+      {haveAtLastOneTime &&
         formAvailableDays.hours.map((el: any, i: number) => (
           <div key={i} className="flex">
             <input

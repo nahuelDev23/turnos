@@ -20,6 +20,7 @@ export const daysReducer = (
       return {
         ...state,
         daysData: action.payload,
+        loading: false,
       };
   }
 };
