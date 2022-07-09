@@ -66,7 +66,6 @@ export const SetDaysAvailable = () => {
           <Checkbox value="domingo" onChange={onChange}>
             Domingo
           </Checkbox>
-          {/* {formAvailableDays[0].includes("domingo") && "joder"} */}
           <Checkbox value="lunes" onChange={onChange}>
             Lunes
           </Checkbox>

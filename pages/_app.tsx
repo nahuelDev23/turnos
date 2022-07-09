@@ -4,11 +4,14 @@ import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import themeBase from "../theme/theme_base";
+import { DaysProvider } from "../context/DaysProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={themeBase}>
-      <Component {...pageProps} />
+      <DaysProvider>
+        <Component {...pageProps} />
+      </DaysProvider>
     </ChakraProvider>
   );
 }

@@ -4,15 +4,16 @@ import type { GetServerSideProps } from "next";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import { Stack, Text, Grid, Heading } from "@chakra-ui/react";
-import { FC, FormEvent, useEffect, useState } from "react";
+import { Stack, Text, Grid, Heading, Button } from "@chakra-ui/react";
+import { FC, FormEvent, useContext, useEffect, useState } from "react";
 
 import { PublicLayout } from "../components/Layout/PublicLayout";
 import { getAllTurns } from "../database/dbTurns";
 import { ITurnForm } from "../interface";
 import { Form } from "../components/form/Form";
 import { TableTurn } from "../components/table/TableTurn";
-import { SetDaysAvailable } from "../components/admin/SetDaysAvailable";
+import { CheckDayTemplate } from "../components/admin/CheckDayTemplate";
+import { DaysContext } from "../context/DaysContext";
 // import { IAvailableDays } from "../interface/IAvailableDays";
 
 interface Props {
@@ -25,6 +26,7 @@ const Home: FC<Props> = ({ turns }) => {
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
+  const { sendForm } = useContext(DaysContext);
   // const [AvailableDay, SetAvailableDays] = useState<IAvailableDays | null>(
   //   null,
   // );
@@ -79,30 +81,6 @@ const Home: FC<Props> = ({ turns }) => {
       });
   };
 
-  const onSubmitAvailibleDays = (e: FormEvent) => {
-    e.preventDefault();
-
-    fetch("/api/turn", {
-      method: "POST",
-      body: JSON.stringify(form),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.ok) {
-          throw new Error(data.message);
-        }
-        setSuccess(data.message);
-        setError(null);
-        setTurnViews((prev) => {
-          return [...prev, data.turn];
-        });
-      })
-      .catch((err) => {
-        setSuccess(null);
-        setError(err.message);
-      });
-  };
-
   const onInputChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -123,6 +101,7 @@ const Home: FC<Props> = ({ turns }) => {
               <Text color="gray.800">{success}</Text>
             </Stack>
           )}
+
           <Form
             form={form}
             setStartDate={setStartDate}
@@ -135,7 +114,14 @@ const Home: FC<Props> = ({ turns }) => {
         </Stack>
         <Stack>
           <Heading>Panel admin</Heading>
-          <SetDaysAvailable />
+          <CheckDayTemplate text="domingo" />
+          <CheckDayTemplate text="lunes" />
+          <CheckDayTemplate text="martes" />
+          <CheckDayTemplate text="miercoles" />
+          <CheckDayTemplate text="jueves" />
+          <CheckDayTemplate text="viernes" />
+          <CheckDayTemplate text="sabado" />
+          <Button onClick={sendForm}>Guardar cambios</Button>
         </Stack>
       </Grid>
     </PublicLayout>
