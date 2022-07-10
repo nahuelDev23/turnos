@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { db } from "../../database";
-import { getAvailableDays } from "../../database/dbAvailableDays";
 import { IDaysHours } from "../../interface/";
 import { AvailableDays } from "../../models/";
 

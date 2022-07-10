@@ -9,6 +9,7 @@ interface Props {
   form: ITurnForm;
   onInputChange: any;
   startDate: Date;
+  turnOffDaysInCalendar: () => number[];
 }
 
 export const Form: FC<Props> = ({
@@ -17,8 +18,17 @@ export const Form: FC<Props> = ({
   form,
   onInputChange,
   startDate,
+  turnOffDaysInCalendar,
 }) => {
   const { name, dni, phone, hour } = form;
+  const isWeekday = (date: Date) => {
+    const day = date.getDay();
+
+    const listToDisableDayInNumber = turnOffDaysInCalendar();
+    const x = listToDisableDayInNumber.includes(day);
+
+    return x;
+  };
 
   return (
     <>
@@ -76,7 +86,7 @@ export const Form: FC<Props> = ({
       </form>
       <Stack color="black">
         <DatePicker
-          // filterDate={isWeekday}
+          filterDate={isWeekday}
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
         />

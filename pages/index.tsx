@@ -9,17 +9,19 @@ import { FC, FormEvent, useContext, useEffect, useState } from "react";
 
 import { PublicLayout } from "../components/Layout/PublicLayout";
 import { getAllTurns } from "../database/dbTurns";
-import { ITurnForm } from "../interface";
+import { IDaysHours, ITurnForm } from "../interface";
 import { Form } from "../components/form/Form";
 import { TableTurn } from "../components/table/TableTurn";
 import { CheckDayTemplate } from "../components/admin/CheckDayTemplate";
 import { DaysContext } from "../context/DaysContext";
-// import { IAvailableDays } from "../interface/IAvailableDays";
+import { getAvailableDays } from "../database/dbAvailableDays";
 
 interface Props {
   turns: ITurnForm[];
+  availableDays: IDaysHours[];
 }
-const Home: FC<Props> = ({ turns }) => {
+
+const Home: FC<Props> = ({ turns, availableDays }) => {
   const [startDate, setStartDate] = useState(
     new Date(new Date().setHours(0, 0, 0, 0)),
   );
@@ -27,9 +29,7 @@ const Home: FC<Props> = ({ turns }) => {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
   const { sendForm } = useContext(DaysContext);
-  // const [AvailableDay, SetAvailableDays] = useState<IAvailableDays | null>(
-  //   null,
-  // );
+
   const [form, setForm] = useState<ITurnForm>({
     name: "",
     dni: "",
@@ -37,12 +37,51 @@ const Home: FC<Props> = ({ turns }) => {
     hour: "",
     day: startDate,
   });
+  const hardCodedDays: string[] = [
+    "domingo",
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado",
+  ];
 
-  // const isWeekday = (date: Date) => {
-  //   const day = date.getDay();
+  const turnOffDaysInCalendar = () => {
+    const bodyDay = availableDays.map((item: any) => item.day);
+    const dayToDelete = hardCodedDays.filter((v) => !bodyDay.includes(v));
+    const dayToNumber = [];
 
-  //   return day !== 0 && day !== 6;
-  // };
+    for (const iterator of dayToDelete) {
+      switch (iterator) {
+        case "domingo":
+          dayToNumber.push(0);
+          break;
+        case "lunes":
+          dayToNumber.push(1);
+          break;
+        case "martes":
+          dayToNumber.push(2);
+          break;
+        case "miercoles":
+          dayToNumber.push(3);
+          break;
+        case "jueves":
+          dayToNumber.push(4);
+          break;
+        case "viernes":
+          dayToNumber.push(5);
+          break;
+        case "sabado":
+          dayToNumber.push(6);
+          break;
+        default:
+          break;
+      }
+    }
+
+    return dayToNumber;
+  };
 
   useEffect(() => {
     setTurnViews(turns);
@@ -106,6 +145,7 @@ const Home: FC<Props> = ({ turns }) => {
             form={form}
             setStartDate={setStartDate}
             startDate={startDate}
+            turnOffDaysInCalendar={turnOffDaysInCalendar}
             onInputChange={(e: any) => onInputChange(e)}
             onSubmit={onSubmit}
           />
@@ -132,10 +172,12 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const turns = await getAllTurns();
+  const availableDays = await getAvailableDays();
 
   return {
     props: {
       turns,
+      availableDays,
     },
   };
 };
