@@ -52,7 +52,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
         setDayAvailable={setDayAvailable}
         text={text}
       />
-
+      {loading && "buscando horarios en db"}
       {haveAtLastOneTime &&
         formAvailableDays.hours.map((element: any, index: number) => (
           <div key={index} className="flex">
