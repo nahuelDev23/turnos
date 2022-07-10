@@ -43,7 +43,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     setFormAvailableDays(values);
   };
 
-  const deleteStep = (e: any, i: number) => {
+  const deleteStep = (i: number) => {
     const values = { ...formAvailableDays };
 
     values.hours.splice(i, 1);
