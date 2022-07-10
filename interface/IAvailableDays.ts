@@ -9,7 +9,7 @@
 // }
 
 export interface IAvailableHours {
-  time: String;
+  time: string;
 }
 
 export type daysString =
