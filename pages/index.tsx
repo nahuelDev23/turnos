@@ -28,7 +28,7 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
-  const { sendForm } = useContext(DaysContext);
+  const { sendForm, fillFormData } = useContext(DaysContext);
 
   const [form, setForm] = useState<ITurnForm>({
     name: "",
@@ -85,6 +85,7 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
 
   useEffect(() => {
     setTurnViews(turns);
+    fillFormData(availableDays);
   }, []);
 
   useEffect(() => {

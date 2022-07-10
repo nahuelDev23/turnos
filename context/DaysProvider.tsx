@@ -75,6 +75,18 @@ export const DaysProvider: FC<Props> = ({ children }) => {
     }
   };
 
+  const fillFormData = (data: IDaysHours[]) => {
+    const formDataFromDB = data.map((item: IDaysHours) => ({
+      day: item.day,
+      hours: item.hours,
+    }));
+
+    dispatch({
+      type: "SET_FORM_DATA",
+      payload: formDataFromDB,
+    });
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -107,6 +119,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
         ...state,
         addFormToFormData,
         sendForm,
+        fillFormData,
       }}
     >
       {children}

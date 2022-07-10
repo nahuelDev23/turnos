@@ -25,9 +25,10 @@ export const Form: FC<Props> = ({
     const day = date.getDay();
 
     const listToDisableDayInNumber = turnOffDaysInCalendar();
-    const x = listToDisableDayInNumber.includes(day);
+    const isDayInCalendarInListToDisable =
+      listToDisableDayInNumber.includes(day);
 
-    return x;
+    return isDayInCalendarInListToDisable;
   };
 
   return (

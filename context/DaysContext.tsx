@@ -8,6 +8,7 @@ interface IDaysContext {
   addFormToFormData: (data: IDaysHours) => void;
   sendForm: () => void;
   loading: boolean;
+  fillFormData: (data: IDaysHours[]) => void;
 }
 
 export const DaysContext = createContext({} as IDaysContext);
