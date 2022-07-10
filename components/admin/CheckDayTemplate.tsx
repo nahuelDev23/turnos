@@ -1,8 +1,8 @@
-import { FC, useContext, useState, useEffect } from "react";
+import { FC, useContext, useEffect } from "react";
 
 import { DaysContext } from "../../context/DaysContext";
 import { useMultipleInputs } from "../../hooks/useMultipleInputs";
-import { IDaysHours, daysString } from "../../interface/IAvailableDays";
+import { daysString } from "../../interface/IAvailableDays";
 
 import { ButtonDay } from "./form/ButtonDay";
 import { InputHour } from "./form/InputHour";
@@ -14,11 +14,6 @@ interface Props {
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
   const { addFormToFormData, daysData, loading } = useContext(DaysContext);
 
-  const [initialState, setInitialState] = useState<IDaysHours>({
-    day: text,
-    hours: [{ time: "" }],
-  });
-
   const {
     addStep,
     deleteStep,
@@ -27,7 +22,9 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     handleChangeStep,
     haveAtLastOneTime,
     setDayAvailable,
-  } = useMultipleInputs(initialState);
+    setFormAvailableDays,
+    setOriginalState,
+  } = useMultipleInputs(text);
 
   useEffect(() => {
     addFormToFormData(formAvailableDays);
@@ -37,7 +34,11 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     const currentDayComponent = daysData.find((item) => item.day === text);
 
     if (currentDayComponent) {
-      setInitialState({
+      setFormAvailableDays({
+        day: currentDayComponent.day,
+        hours: currentDayComponent.hours,
+      });
+      setOriginalState({
         day: currentDayComponent.day,
         hours: currentDayComponent.hours,
       });

@@ -1,17 +1,20 @@
 import { useMemo, useState, useEffect } from "react";
 
-import { IAvailableHours, IDaysHours } from "../interface";
+import { daysString, IAvailableHours, IDaysHours } from "../interface";
 
-export const useMultipleInputs = (initialState: IDaysHours) => {
-  const [formAvailableDays, setFormAvailableDays] =
-    useState<IDaysHours>(initialState);
-
+export const useMultipleInputs = (text: daysString) => {
+  const [formAvailableDays, setFormAvailableDays] = useState<IDaysHours>({
+    day: text,
+    hours: [{ time: "" }],
+  });
+  const [originalState, setOriginalState] = useState<IDaysHours>({
+    day: text,
+    hours: [{ time: "" }],
+  });
   const [haveAtLastOneTime, setHaveAtLastOneTime] = useState(false);
 
   const addStep = () => {
     const values = { ...formAvailableDays };
-
-    console.log("click add step");
 
     values.hours.push({
       time: "",
@@ -35,8 +38,16 @@ export const useMultipleInputs = (initialState: IDaysHours) => {
 
   const setDayAvailable = () => {
     setHaveAtLastOneTime((isAvailable) => !isAvailable);
-    setFormAvailableDays(initialState);
   };
+
+  useEffect(() => {
+    if (!haveAtLastOneTime) {
+      setFormAvailableDays({
+        day: text,
+        hours: [{ time: "" }],
+      });
+    }
+  }, [haveAtLastOneTime]);
 
   const isPreviousInputEmpty = useMemo(() => {
     const first =
@@ -55,8 +66,8 @@ export const useMultipleInputs = (initialState: IDaysHours) => {
     );
 
     setHaveAtLastOneTime(hasAtLastOneTimeSetted);
-    setFormAvailableDays(initialState);
-  }, [initialState]);
+    // setFormAvailableDays(formAvailableDays);
+  }, [formAvailableDays]);
 
   return {
     // values
@@ -68,5 +79,7 @@ export const useMultipleInputs = (initialState: IDaysHours) => {
     formAvailableDays,
     handleChangeStep,
     setDayAvailable,
+    setFormAvailableDays,
+    setOriginalState,
   };
 };
