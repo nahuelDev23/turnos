@@ -3,21 +3,21 @@ import { FC } from "react";
 
 interface Props {
   haveAtLastOneTime: boolean;
-  loading: boolean;
+  isLoadingFormData: boolean;
   setDayAvailable: () => void;
   text: string;
 }
 
 export const ButtonDay: FC<Props> = ({
   haveAtLastOneTime,
-  loading,
+  isLoadingFormData,
   setDayAvailable,
   text,
 }) => {
   return (
     <Button
       bgColor={haveAtLastOneTime ? "green.600" : undefined}
-      disabled={loading}
+      disabled={isLoadingFormData}
       onClick={setDayAvailable}
     >
       {text}

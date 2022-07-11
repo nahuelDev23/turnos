@@ -7,11 +7,8 @@ export const useMultipleInputs = (text: daysString) => {
     day: text,
     hours: [{ time: "" }],
   });
-  const [originalState, setOriginalState] = useState<IDaysHours>({
-    day: text,
-    hours: [{ time: "" }],
-  });
-  const [haveAtLastOneTime, setHaveAtLastOneTime] = useState(false);
+
+  const [toggleDisableDay, setToggleDisableDay] = useState(false);
 
   const addStep = () => {
     const values = { ...formAvailableDays };
@@ -36,18 +33,10 @@ export const useMultipleInputs = (text: daysString) => {
     setFormAvailableDays(values);
   };
 
+  // todo poner nombre disableDay || toggleDisableDay
   const setDayAvailable = () => {
-    setHaveAtLastOneTime((isAvailable) => !isAvailable);
+    setToggleDisableDay((isAvailable) => !isAvailable);
   };
-
-  useEffect(() => {
-    if (!haveAtLastOneTime) {
-      setFormAvailableDays({
-        day: text,
-        hours: [{ time: "" }],
-      });
-    }
-  }, [haveAtLastOneTime]);
 
   const isPreviousInputEmpty = useMemo(() => {
     const first =
@@ -61,17 +50,18 @@ export const useMultipleInputs = (text: daysString) => {
   }, [formAvailableDays]);
 
   useEffect(() => {
+    // hace que los campos que tienen al menos un horario aparezcan abiertos
+    // y que si borras todos los campos los horarios desaparezcan solos
     const hasAtLastOneTimeSetted = formAvailableDays.hours.some(
       (item: IAvailableHours) => item.time !== "",
     );
 
-    setHaveAtLastOneTime(hasAtLastOneTimeSetted);
-    // setFormAvailableDays(formAvailableDays);
+    setToggleDisableDay(hasAtLastOneTimeSetted);
   }, [formAvailableDays]);
 
   return {
     // values
-    haveAtLastOneTime,
+    toggleDisableDay,
     isPreviousInputEmpty,
     // methods
     addStep,
@@ -80,6 +70,6 @@ export const useMultipleInputs = (text: daysString) => {
     handleChangeStep,
     setDayAvailable,
     setFormAvailableDays,
-    setOriginalState,
+    // setOriginalState,
   };
 };

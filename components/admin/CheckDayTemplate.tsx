@@ -12,7 +12,8 @@ interface Props {
 }
 
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
-  const { addFormToFormData, daysData, loading } = useContext(DaysContext);
+  const { addFormToFormData, daysData, isLoadingFormData, removeDay } =
+    useContext(DaysContext);
 
   const {
     addStep,
@@ -20,10 +21,10 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     formAvailableDays,
     isPreviousInputEmpty,
     handleChangeStep,
-    haveAtLastOneTime,
+    toggleDisableDay,
     setDayAvailable,
     setFormAvailableDays,
-    setOriginalState,
+    // setOriginalState,
   } = useMultipleInputs(text);
 
   useEffect(() => {
@@ -38,23 +39,34 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
         day: currentDayComponent.day,
         hours: currentDayComponent.hours,
       });
-      setOriginalState({
-        day: currentDayComponent.day,
-        hours: currentDayComponent.hours,
-      });
     }
   }, [daysData]);
+
+  useEffect(() => {
+    const currentDayComponent = daysData.find((item) => item.day === text);
+
+    if (!toggleDisableDay) {
+      removeDay(text);
+    } else {
+      if (currentDayComponent) {
+        setFormAvailableDays({
+          day: currentDayComponent.day,
+          hours: currentDayComponent.hours,
+        });
+      }
+    }
+  }, [toggleDisableDay]);
 
   return (
     <>
       <ButtonDay
-        haveAtLastOneTime={haveAtLastOneTime}
-        loading={loading}
+        haveAtLastOneTime={toggleDisableDay}
+        isLoadingFormData={isLoadingFormData}
         setDayAvailable={setDayAvailable}
         text={text}
       />
-      {loading && "buscando horarios en db"}
-      {haveAtLastOneTime &&
+      {isLoadingFormData && "buscando horarios en db"}
+      {toggleDisableDay &&
         formAvailableDays.hours.map((element: any, index: number) => (
           <div key={index} className="flex">
             <InputHour

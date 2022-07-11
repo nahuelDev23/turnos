@@ -1,6 +1,6 @@
 import React, { FC, useReducer, useEffect } from "react";
 
-import { IDaysHours } from "../interface/IAvailableDays";
+import { IDaysHours, daysString } from "../interface/IAvailableDays";
 
 import { DaysContext } from "./DaysContext";
 import { daysReducer } from "./daysReducer";
@@ -12,16 +12,23 @@ interface Props {
 export interface IDayInitialState {
   formData: IDaysHours[];
   daysData: IDaysHours[];
-  loading: boolean;
+  isLoadingFormData: boolean;
 }
 const DAYINITIALSTATE: IDayInitialState = {
   formData: [],
   daysData: [],
-  loading: true,
+  isLoadingFormData: false,
 };
 
 export const DaysProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(daysReducer, DAYINITIALSTATE);
+
+  const removeDay = (day: daysString) => {
+    dispatch({
+      type: "SET_REMOVE_DAY_FROM_FORM_DATA",
+      payload: state.formData.filter((item) => item.day !== day),
+    });
+  };
 
   const addFormToFormData = (data: IDaysHours) => {
     const dayAlreadyAssigned = state.formData.some(
@@ -63,7 +70,11 @@ export const DaysProvider: FC<Props> = ({ children }) => {
     });
   };
 
-  const getData = async () => {
+  const getDaysData = async () => {
+    dispatch({
+      type: "LOADING_FORM_DATA",
+      payload: true,
+    });
     const res = await fetch("/api/availableDays");
     const data = await res.json();
 
@@ -88,7 +99,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
   };
 
   useEffect(() => {
-    getData();
+    getDaysData();
   }, []);
 
   const sendForm = () => {
@@ -120,6 +131,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
         addFormToFormData,
         sendForm,
         fillFormData,
+        removeDay,
       }}
     >
       {children}

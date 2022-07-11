@@ -125,8 +125,6 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  if (!turns) return <p>loading</p>;
-
   return (
     <PublicLayout>
       <Grid gap="4" templateColumns="repeat(2,1fr)">
