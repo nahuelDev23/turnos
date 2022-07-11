@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useMemo } from "react";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
 
 import { DaysContext } from "../../context/DaysContext";
 import { useMultipleInputs } from "../../hooks/useMultipleInputs";
@@ -14,21 +14,25 @@ interface Props {
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
   const { addFormToFormData, daysData, isLoadingFormData, removeDay } =
     useContext(DaysContext);
-  const currentDayComponent = useMemo(
-    () => daysData.find((item) => item.day === text),
-    [daysData, text],
-  );
+  const [toggleDisableDay, setToggleDisableDay] = useState(false);
+
   const {
     addStep,
     deleteStep,
     formAvailableDays,
     isPreviousInputEmpty,
     handleChangeStep,
-    toggleDisableDay,
-    setDayAvailable,
+
     setFormAvailableDays,
-    setToggleDisableDay,
   } = useMultipleInputs(text);
+
+  const setDayAvailable = () => {
+    setToggleDisableDay((isAvailable) => !isAvailable);
+  };
+  const currentDayComponent = useMemo(
+    () => daysData.find((item) => item.day === text),
+    [daysData, text],
+  );
 
   useEffect(() => {
     addFormToFormData(formAvailableDays);

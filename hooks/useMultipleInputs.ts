@@ -8,8 +8,6 @@ export const useMultipleInputs = (text: daysString) => {
     hours: [{ time: "" }],
   });
 
-  const [toggleDisableDay, setToggleDisableDay] = useState(false);
-
   const addStep = () => {
     const values = { ...formAvailableDays };
 
@@ -33,10 +31,6 @@ export const useMultipleInputs = (text: daysString) => {
     setFormAvailableDays(values);
   };
 
-  const setDayAvailable = () => {
-    setToggleDisableDay((isAvailable) => !isAvailable);
-  };
-
   const isPreviousInputEmpty = useMemo(() => {
     const first =
       formAvailableDays.hours.length === 1 &&
@@ -50,16 +44,13 @@ export const useMultipleInputs = (text: daysString) => {
 
   return {
     // values
-    toggleDisableDay,
+
     isPreviousInputEmpty,
     // methods
     addStep,
     deleteStep,
     formAvailableDays,
     handleChangeStep,
-    setDayAvailable,
     setFormAvailableDays,
-    setToggleDisableDay,
-    // setOriginalState,
   };
 };
