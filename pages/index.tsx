@@ -9,12 +9,14 @@ import { FC, FormEvent, useContext, useEffect, useState } from "react";
 
 import { PublicLayout } from "../components/Layout/PublicLayout";
 import { getAllTurns } from "../database/dbTurns";
-import { daysString, IDaysHours, ITurnForm } from "../interface";
+import { IDaysHours, ITurnForm } from "../interface";
 import { Form } from "../components/form/Form";
 import { TableTurn } from "../components/table/TableTurn";
 import { CheckDayTemplate } from "../components/admin/CheckDayTemplate";
 import { DaysContext } from "../context/DaysContext";
 import { getAvailableDays } from "../database/dbAvailableDays";
+import { numberDayToString } from "../helpers/numberDayToString";
+import { stringDayToNumber } from "../helpers/stringDayToNumber";
 
 interface Props {
   turns: ITurnForm[];
@@ -28,7 +30,7 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
-  const { sendForm, fillFormData, formData } = useContext(DaysContext);
+  const { sendForm, fillFormData } = useContext(DaysContext);
   const [hoursPerDay, setHoursPerDay] = useState<any>(null);
   const [form, setForm] = useState<ITurnForm>({
     name: "",
@@ -53,31 +55,7 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
     const dayToNumber = [];
 
     for (const iterator of dayToDelete) {
-      switch (iterator) {
-        case "domingo":
-          dayToNumber.push(0);
-          break;
-        case "lunes":
-          dayToNumber.push(1);
-          break;
-        case "martes":
-          dayToNumber.push(2);
-          break;
-        case "miercoles":
-          dayToNumber.push(3);
-          break;
-        case "jueves":
-          dayToNumber.push(4);
-          break;
-        case "viernes":
-          dayToNumber.push(5);
-          break;
-        case "sabado":
-          dayToNumber.push(6);
-          break;
-        default:
-          break;
-      }
+      dayToNumber.push(stringDayToNumber(iterator));
     }
 
     return dayToNumber;
@@ -89,39 +67,13 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
   }, []);
 
   useEffect(() => {
-    let currentDay: string | null = null;
+    const currentDay = numberDayToString(startDate.getDay());
 
-    // todo hacer helper
-    switch (startDate.getDay()) {
-      case 0:
-        currentDay = "domingo";
-        break;
-      case 1:
-        currentDay = "lunes";
-        break;
-      case 2:
-        currentDay = "martes";
-        break;
-      case 3:
-        currentDay = "miercoles";
-        break;
-      case 4:
-        currentDay = "jueves";
-        break;
-      case 5:
-        currentDay = "viernes";
-        break;
-      case 6:
-        currentDay = "sabado";
-        break;
-      default:
-        break;
-    }
+    if (availableDays.length > 0) {
+      const { hours } = availableDays.find(
+        (item) => item.day === currentDay,
+      ) as any;
 
-    if (formData.length > 0) {
-      const { hours } = formData.find((item) => item.day === currentDay);
-
-      console.log(hours);
       setHoursPerDay(hours);
     }
   }, [startDate]);
