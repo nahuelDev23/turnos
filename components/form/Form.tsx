@@ -9,7 +9,7 @@ interface Props {
   form: ITurnForm;
   onInputChange: any;
   startDate: Date;
-  turnOffDaysInCalendar: () => number[];
+  turnOffDaysInCalendar: () => (number | undefined)[];
   hoursPerDay: any;
 }
 

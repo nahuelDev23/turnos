@@ -70,11 +70,12 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
     const currentDay = numberDayToString(startDate.getDay());
 
     if (availableDays.length > 0) {
-      const { hours } = availableDays.find(
-        (item) => item.day === currentDay,
-      ) as any;
+      const day = availableDays.find((item) => item.day === currentDay) as any;
 
-      setHoursPerDay(hours);
+      // asd
+      if (day) {
+        setHoursPerDay(day.hours);
+      }
     }
   }, [startDate]);
 
