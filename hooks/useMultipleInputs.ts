@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 
-import { daysString, IAvailableHours, IDaysHours } from "../interface";
+import { daysString, IDaysHours } from "../interface";
 
 export const useMultipleInputs = (text: daysString) => {
   const [formAvailableDays, setFormAvailableDays] = useState<IDaysHours>({
