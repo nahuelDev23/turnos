@@ -33,7 +33,6 @@ export const useMultipleInputs = (text: daysString) => {
     setFormAvailableDays(values);
   };
 
-  // todo poner nombre disableDay || toggleDisableDay
   const setDayAvailable = () => {
     setToggleDisableDay((isAvailable) => !isAvailable);
   };
@@ -49,16 +48,6 @@ export const useMultipleInputs = (text: daysString) => {
     return first || second;
   }, [formAvailableDays]);
 
-  useEffect(() => {
-    // hace que los campos que tienen al menos un horario aparezcan abiertos
-    // y que si borras todos los campos los horarios desaparezcan solos
-    const hasAtLastOneTimeSetted = formAvailableDays.hours.some(
-      (item: IAvailableHours) => item.time !== "",
-    );
-
-    setToggleDisableDay(hasAtLastOneTimeSetted);
-  }, [formAvailableDays]);
-
   return {
     // values
     toggleDisableDay,
@@ -70,6 +59,7 @@ export const useMultipleInputs = (text: daysString) => {
     handleChangeStep,
     setDayAvailable,
     setFormAvailableDays,
+    setToggleDisableDay,
     // setOriginalState,
   };
 };

@@ -2,7 +2,7 @@ import { FC, useContext, useEffect } from "react";
 
 import { DaysContext } from "../../context/DaysContext";
 import { useMultipleInputs } from "../../hooks/useMultipleInputs";
-import { daysString } from "../../interface/IAvailableDays";
+import { daysString, IAvailableHours } from "../../interface/IAvailableDays";
 
 import { ButtonDay } from "./form/ButtonDay";
 import { InputHour } from "./form/InputHour";
@@ -24,6 +24,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     toggleDisableDay,
     setDayAvailable,
     setFormAvailableDays,
+    setToggleDisableDay,
     // setOriginalState,
   } = useMultipleInputs(text);
 
@@ -35,6 +36,12 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     const currentDayComponent = daysData.find((item) => item.day === text);
 
     if (currentDayComponent) {
+      const hasAtLastOneTimeSetted = currentDayComponent.hours.some(
+        (item: IAvailableHours) => item.time !== "",
+      );
+
+      setToggleDisableDay(hasAtLastOneTimeSetted);
+
       setFormAvailableDays({
         day: currentDayComponent.day,
         hours: currentDayComponent.hours,
@@ -49,6 +56,8 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
       removeDay(text);
     } else {
       if (currentDayComponent) {
+        console.log({ currentDayComponent });
+
         setFormAvailableDays({
           day: currentDayComponent.day,
           hours: currentDayComponent.hours,
