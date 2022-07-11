@@ -10,6 +10,7 @@ interface Props {
   onInputChange: any;
   startDate: Date;
   turnOffDaysInCalendar: () => number[];
+  hoursPerDay: any;
 }
 
 export const Form: FC<Props> = ({
@@ -19,6 +20,7 @@ export const Form: FC<Props> = ({
   onInputChange,
   startDate,
   turnOffDaysInCalendar,
+  hoursPerDay,
 }) => {
   const { name, dni, phone, hour } = form;
   const isWeekday = (date: Date) => {
@@ -78,9 +80,12 @@ export const Form: FC<Props> = ({
           >
             Elegí una hora
           </option>
-          <option value="10:00:00">10:00:00</option>
-          <option value="12:00:00">12:00:00</option>
-          <option value="14:00:00">14:00:00</option>
+          {hoursPerDay &&
+            hoursPerDay.map((hour: any, index: number) => (
+              <option key={index} value={hour.time}>
+                {hour.time}
+              </option>
+            ))}
         </Select>
 
         <Button type="submit">Reservar</Button>

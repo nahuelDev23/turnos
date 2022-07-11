@@ -9,7 +9,7 @@ import { FC, FormEvent, useContext, useEffect, useState } from "react";
 
 import { PublicLayout } from "../components/Layout/PublicLayout";
 import { getAllTurns } from "../database/dbTurns";
-import { IDaysHours, ITurnForm } from "../interface";
+import { daysString, IDaysHours, ITurnForm } from "../interface";
 import { Form } from "../components/form/Form";
 import { TableTurn } from "../components/table/TableTurn";
 import { CheckDayTemplate } from "../components/admin/CheckDayTemplate";
@@ -28,8 +28,8 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
-  const { sendForm, fillFormData } = useContext(DaysContext);
-
+  const { sendForm, fillFormData, formData } = useContext(DaysContext);
+  const [hoursPerDay, setHoursPerDay] = useState<any>(null);
   const [form, setForm] = useState<ITurnForm>({
     name: "",
     dni: "",
@@ -89,8 +89,41 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
   }, []);
 
   useEffect(() => {
-    // cuando cambia el dia se habilitan array de horarios para ese dia
-    console.log(startDate.getDay());
+    let currentDay: string | null = null;
+
+    // todo hacer helper
+    switch (startDate.getDay()) {
+      case 0:
+        currentDay = "domingo";
+        break;
+      case 1:
+        currentDay = "lunes";
+        break;
+      case 2:
+        currentDay = "martes";
+        break;
+      case 3:
+        currentDay = "miercoles";
+        break;
+      case 4:
+        currentDay = "jueves";
+        break;
+      case 5:
+        currentDay = "viernes";
+        break;
+      case 6:
+        currentDay = "sabado";
+        break;
+      default:
+        break;
+    }
+
+    if (formData.length > 0) {
+      const { hours } = formData.find((item) => item.day === currentDay);
+
+      console.log(hours);
+      setHoursPerDay(hours);
+    }
   }, [startDate]);
 
   useEffect(() => {
@@ -142,6 +175,7 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
 
           <Form
             form={form}
+            hoursPerDay={hoursPerDay}
             setStartDate={setStartDate}
             startDate={startDate}
             turnOffDaysInCalendar={turnOffDaysInCalendar}
