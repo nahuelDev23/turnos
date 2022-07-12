@@ -1,4 +1,4 @@
-import { Stack, Text } from "@chakra-ui/react";
+import { Stack, Text, Heading } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import useSWR from "swr";
 
@@ -9,9 +9,9 @@ import { Form } from "./Form";
 
 const fetcher = async (url: string) => fetch(url).then((res) => res.json());
 
-export const FormTakeATurn = () => {
+export const TakeATurn = () => {
   const { data: availableDays, error: errorAvailableDays } = useSWR(
-    "/api/availableDays",
+    "/api/admin/availableDays",
     fetcher,
   );
   const {
@@ -41,6 +41,7 @@ export const FormTakeATurn = () => {
 
   return (
     <>
+      <Heading>Saca un turno conmigo 😇</Heading>
       {error && (
         <Stack bgColor="red.300" borderRadius="md" my="4" p="4">
           <Text color="red.800">{error}</Text>
@@ -54,9 +55,6 @@ export const FormTakeATurn = () => {
       <Form
         form={form}
         hoursPerDay={hoursPerDay}
-        // setStartDate={setStartDate}
-        // startDate={startDate}
-        // turnOffDaysInCalendar={turnOffDaysInCalendar}
         onInputChange={(e: any) => onInputChange(e)}
         onSubmit={onSubmit}
       />
@@ -68,7 +66,7 @@ export const FormTakeATurn = () => {
             onChange={(date: Date) => setStartDate(date)}
           />
         ) : (
-          <Text>Obteniendo dias disponibles</Text>
+          <Text>Obteniendo días disponibles</Text>
         )}
       </Stack>
     </>

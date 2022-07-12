@@ -22,7 +22,6 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     formAvailableDays,
     isPreviousInputEmpty,
     handleChangeStep,
-
     setFormAvailableDays,
   } = useMultipleInputs(text);
 
@@ -36,10 +35,13 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
 
   useEffect(() => {
     addFormToFormData(formAvailableDays);
-    // setTemporal()
   }, [formAvailableDays]);
 
   useEffect(() => {
+    /** hace que se rellene automáticamente
+     * y se ponga en true el toggle de los Dias
+     *  */
+
     if (currentDayComponent) {
       const hasAtLastOneTimeSetted = currentDayComponent.hours.some(
         (item: IAvailableHours) => item.time !== "",
@@ -57,11 +59,11 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
   useEffect(() => {
     if (!toggleDisableDay) return removeDay(text);
 
-    if (currentDayComponent)
-      return setFormAvailableDays({
-        day: currentDayComponent.day,
-        hours: currentDayComponent.hours,
-      });
+    // if (currentDayComponent)
+    //   return setFormAvailableDays({
+    //     day: currentDayComponent.day,
+    //     hours: currentDayComponent.hours,
+    //   });
 
     setFormAvailableDays({
       day: formAvailableDays.day,

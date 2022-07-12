@@ -8,7 +8,7 @@ export const useTakeATurn = (availableDays: IDaysHours[]) => {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
   const [hoursPerDay, setHoursPerDay] = useState<any>(null);
-  // const [availableDays, setAvailableDays] = useState<IDaysHours[]>(days);
+
   const [startDate, setStartDate] = useState(
     new Date(new Date().setHours(0, 0, 0, 0)),
   );
@@ -50,20 +50,15 @@ export const useTakeATurn = (availableDays: IDaysHours[]) => {
   }, [startDate]);
 
   useEffect(() => {
-    if (availableDays !== undefined) {
+    // availableDays !== undefined
+    if (availableDays) {
       const currentDay = numberDayToString(startDate.getDay());
 
-      if (availableDays.length > 0) {
-        console.log("si", availableDays);
-        const { hours } =
-          availableDays &&
-          (availableDays.find(
-            (item: IDaysHours) => item.day === currentDay,
-          ) as any);
+      const todayHaveHours = availableDays.find(
+        (item: IDaysHours) => item.day === currentDay,
+      ) as any;
 
-        // ww
-        setHoursPerDay(hours);
-      }
+      if (todayHaveHours) return setHoursPerDay(todayHaveHours.hours);
     }
   }, [startDate, availableDays]);
 
