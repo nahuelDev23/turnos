@@ -75,15 +75,21 @@ export const DaysProvider: FC<Props> = ({ children }) => {
       type: "LOADING_FORM_DATA",
       payload: true,
     });
-    const res = await fetch("/api/availableDays");
+    const res = await fetch("/api/admin/availableDays");
     const data = await res.json();
 
     if (data) {
-      dispatch({
-        type: "SET_DAYS_DATA",
-        payload: data,
-      });
+      fillFormData(data);
+
+      fillDaysData(data);
     }
+  };
+
+  const fillDaysData = (data: IDaysHours[]) => {
+    dispatch({
+      type: "SET_DAYS_DATA",
+      payload: data,
+    });
   };
 
   const fillFormData = (data: IDaysHours[]) => {
@@ -103,7 +109,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
   }, []);
 
   const sendForm = () => {
-    fetch("/api/availableDays", {
+    fetch("/api/admin/availableDays", {
       method: "POST",
       body: JSON.stringify(state.formData),
     })
@@ -130,7 +136,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
         ...state,
         addFormToFormData,
         sendForm,
-        fillFormData,
+
         removeDay,
       }}
     >

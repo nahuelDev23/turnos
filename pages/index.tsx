@@ -4,17 +4,14 @@ import type { GetServerSideProps } from "next";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import { Stack, Text, Grid, Heading, Button } from "@chakra-ui/react";
-import { FC, FormEvent, useContext, useEffect, useState } from "react";
+import { Stack, Text, Grid } from "@chakra-ui/react";
+import { FC, FormEvent, useEffect, useState } from "react";
 
 import { PublicLayout } from "../components/Layout/PublicLayout";
 import { getAllTurns } from "../database/dbTurns";
 import { IDaysHours, ITurnForm } from "../interface";
 import { Form } from "../components/form/Form";
 import { TableTurn } from "../components/table/TableTurn";
-import { CheckDayTemplate } from "../components/admin/CheckDayTemplate";
-import { DaysContext } from "../context/DaysContext";
-import { getAvailableDays } from "../database/dbAvailableDays";
 import { numberDayToString } from "../helpers/numberDayToString";
 import { stringDayToNumber } from "../helpers/stringDayToNumber";
 
@@ -30,7 +27,7 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
   const [turnsView, setTurnViews] = useState<ITurnForm[]>([]);
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
-  const { sendForm, fillFormData } = useContext(DaysContext);
+
   const [hoursPerDay, setHoursPerDay] = useState<any>(null);
   const [form, setForm] = useState<ITurnForm>({
     name: "",
@@ -63,7 +60,6 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
 
   useEffect(() => {
     setTurnViews(turns);
-    fillFormData(availableDays);
   }, []);
 
   useEffect(() => {
@@ -138,17 +134,6 @@ const Home: FC<Props> = ({ turns, availableDays }) => {
 
           <TableTurn turnsView={turnsView} />
         </Stack>
-        <Stack>
-          <Heading>Panel admin</Heading>
-          <CheckDayTemplate text="domingo" />
-          <CheckDayTemplate text="lunes" />
-          <CheckDayTemplate text="martes" />
-          <CheckDayTemplate text="miercoles" />
-          <CheckDayTemplate text="jueves" />
-          <CheckDayTemplate text="viernes" />
-          <CheckDayTemplate text="sabado" />
-          <Button onClick={sendForm}>Guardar cambios</Button>
-        </Stack>
       </Grid>
     </PublicLayout>
   );
@@ -158,12 +143,10 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const turns = await getAllTurns();
-  const availableDays = await getAvailableDays();
 
   return {
     props: {
       turns,
-      availableDays,
     },
   };
 };

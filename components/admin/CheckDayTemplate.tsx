@@ -36,6 +36,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
 
   useEffect(() => {
     addFormToFormData(formAvailableDays);
+    // setTemporal()
   }, [formAvailableDays]);
 
   useEffect(() => {
@@ -54,18 +55,18 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
   }, [daysData]);
 
   useEffect(() => {
-    if (!toggleDisableDay) {
-      removeDay(text);
-    } else {
-      if (currentDayComponent) {
-        console.log({ currentDayComponent });
+    if (!toggleDisableDay) return removeDay(text);
 
-        setFormAvailableDays({
-          day: currentDayComponent.day,
-          hours: currentDayComponent.hours,
-        });
-      }
-    }
+    if (currentDayComponent)
+      return setFormAvailableDays({
+        day: currentDayComponent.day,
+        hours: currentDayComponent.hours,
+      });
+
+    setFormAvailableDays({
+      day: formAvailableDays.day,
+      hours: formAvailableDays.hours,
+    });
   }, [toggleDisableDay]);
 
   return (

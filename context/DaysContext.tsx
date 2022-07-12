@@ -8,7 +8,6 @@ interface IDaysContext {
   addFormToFormData: (data: IDaysHours) => void;
   sendForm: () => void;
   isLoadingFormData: boolean;
-  fillFormData: (data: IDaysHours[]) => void;
   removeDay: (day: daysString) => void;
 }
 

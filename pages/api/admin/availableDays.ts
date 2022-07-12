@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { db } from "../../database";
-import { IDaysHours } from "../../interface/";
-import { AvailableDays } from "../../models/";
+import { db } from "../../../database";
+import { IDaysHours } from "../../../interface/IAvailableDays";
+import AvailableDays from "../../../models/AvailableDays";
 
 type Data = {
   ok: boolean;
@@ -38,6 +38,7 @@ export default function handler(
 const getDays = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
     await db.connect();
+
     const days = await AvailableDays.find();
 
     await db.disconnect();
@@ -80,7 +81,7 @@ const postAvailableDays = async (
 
     return res.status(200).json({
       ok: true,
-      message: "El turno se configuro con exito",
+      message: "El turno se configuro con éxito",
       // availableDays,
     });
   } catch (error: any) {
