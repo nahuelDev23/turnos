@@ -22,6 +22,15 @@ export const responseAvailableDaysFilled: IDaysHours[] = [
   {
     day: "miercoles",
     hours: [
+      { time: "12:00" },
+      { time: "13:20" },
+      { time: "14:30" },
+      { time: "15:40" },
+    ],
+  },
+  {
+    day: "jueves",
+    hours: [
       { time: "10:00" },
       { time: "10:20" },
       { time: "10:30" },
@@ -29,7 +38,25 @@ export const responseAvailableDaysFilled: IDaysHours[] = [
     ],
   },
   {
-    day: "jueves",
+    day: "viernes",
+    hours: [
+      { time: "10:00" },
+      { time: "10:20" },
+      { time: "10:30" },
+      { time: "10:40" },
+    ],
+  },
+  {
+    day: "sabado",
+    hours: [
+      { time: "10:00" },
+      { time: "10:20" },
+      { time: "10:30" },
+      { time: "10:40" },
+    ],
+  },
+  {
+    day: "domingo",
     hours: [
       { time: "10:00" },
       { time: "10:20" },

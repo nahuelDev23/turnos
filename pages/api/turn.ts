@@ -4,7 +4,9 @@ import moment from "moment";
 
 import { Turn } from "../../models";
 import { db } from "../../database";
-import { ITurnForm } from "../../interface/ITurn";
+import { ITurnForm, ITurnDB } from "../../interface/ITurn";
+import { numberDayToString } from "../../helpers/numberDayToString";
+import AvailableDays from "../../models/AvailableDays";
 type Data = {
   ok: boolean;
   message: string;
@@ -24,25 +26,45 @@ export default function handler(
   }
 }
 
-const getTurnByDate = async (day: Date) => {
+const getTurnByDate = async (day: Date): Promise<ITurnDB[]> => {
   const turn = await Turn.find({ day: new Date(day) });
 
-  const x = turn.filter(
+  const todayTurns = turn.filter(
     (item) => item.day.toString() === new Date(day).toString(),
   );
 
-  return x;
+  return todayTurns;
 };
 const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const { hour, day } = JSON.parse(req.body);
+  const { hour, day, name, dni, phone } = JSON.parse(req.body);
 
   try {
     await db.connect();
-    const hourAvalive = ["10:00:00", "12:00:00", "14:00:00"];
+
+    if (!hour) {
+      throw new Error("No se selecciono ningún horario");
+    }
+
+    if (!name) {
+      throw new Error("No se introdujo ningún nombre");
+    }
+
+    if (!dni) {
+      throw new Error("No se introdujo ningún dni");
+    }
+
+    if (!phone) {
+      throw new Error("No se introdujo ningún teléfono  de contacto");
+    }
 
     const pickerDate = new Date(moment(day).utc().format("YYYY-MM-DD"));
 
     const turnInDay = await getTurnByDate(pickerDate);
+
+    const pickerDateToNumber = new Date(day).getDay();
+    const pickerDateToString = numberDayToString(pickerDateToNumber);
+
+    const hourAvalive = await AvailableDays.find({ day: pickerDateToString });
 
     if (turnInDay.length === hourAvalive.length) {
       throw new Error("No hay mas turnos disponibles ese dia");
@@ -63,7 +85,7 @@ const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     return res.status(200).json({
       ok: true,
-      message: "El turno se reservo con exito",
+      message: "El turno se reservo con éxito",
       turn,
     });
   } catch (error: any) {
