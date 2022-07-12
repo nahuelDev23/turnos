@@ -2,12 +2,13 @@ import { FC } from "react";
 import { Select, Input, Button } from "@chakra-ui/react";
 
 import { ITurnForm } from "../../../interface";
+import { IAvailableHours } from "../../../interface/IAvailableDays";
 
 interface Props {
   onSubmit: any;
   form: ITurnForm;
   onInputChange: any;
-  hoursPerDay: any;
+  hoursPerDay: IAvailableHours[];
 }
 
 export const Form: FC<Props> = ({

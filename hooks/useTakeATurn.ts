@@ -4,6 +4,8 @@ import { ITurnForm } from "../interface";
 import { numberDayToString } from "../helpers/numberDayToString";
 import { IDaysHours } from "../interface/IAvailableDays";
 
+// todo ver si puedo llamar directamente aca availableDays
+
 export const useTakeATurn = (availableDays: IDaysHours[]) => {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
