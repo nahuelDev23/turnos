@@ -81,15 +81,15 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
       />
       {isLoadingFormData && "buscando horarios en db"}
       {toggleDisableDay &&
-        formAvailableDays.hours.map((element: any, index: number) => (
+        formAvailableDays.hours.map((times: any, index: number) => (
           <div key={index} className="flex">
             <InputHour
               addStep={addStep}
               deleteStep={deleteStep}
-              element={element}
               handleChangeStep={handleChangeStep}
               index={index}
               isPreviousInputEmpty={isPreviousInputEmpty}
+              times={times}
             />
           </div>
         ))}

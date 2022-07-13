@@ -6,16 +6,17 @@ import { IAvailableHours } from "../../../interface";
 interface Props {
   handleChangeStep: (e: any, i: number) => void;
   index: number;
-  element: IAvailableHours;
+  times: IAvailableHours;
   addStep: () => void;
   deleteStep: (index: number) => void;
   isPreviousInputEmpty: boolean;
 }
 
+// todo usemultipleinputs hacer test
 export const InputHour: FC<Props> = ({
   handleChangeStep,
   index,
-  element,
+  times,
   addStep,
   deleteStep,
   isPreviousInputEmpty,
@@ -29,7 +30,7 @@ export const InputHour: FC<Props> = ({
         name="hours"
         placeholder={`Horario N ${index}`}
         type="text"
-        value={element.time}
+        value={times.time}
         onChange={(event) => handleChangeStep(event, index)}
       />
       <Button

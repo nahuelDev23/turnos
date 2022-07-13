@@ -1,10 +1,4 @@
-import {
-  render,
-  renderHook,
-  screen,
-  waitFor,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 
 import { CheckDayTemplate } from "../../../components/admin/CheckDayTemplate";
 import { useMultipleInputs } from "../../../hooks/useMultipleInputs";
@@ -27,44 +21,59 @@ const props = {
   sendForm,
 };
 
+jest.mock("../../../hooks/useMultipleInputs");
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
+
+const mockAddStep = jest.fn();
+const mockDeleteStep = jest.fn();
+const mockHandleChangeStep = jest.fn();
+const mockSetFormAvailableDays = jest.fn();
+
 describe("test CheckDayTemplate", () => {
-  test("should render 4 inputs", async () => {
-    renderHook(() => {
-      useMultipleInputs("lunes");
-    });
+  test("should render the component", () => {
+    (useMultipleInputs as jest.Mock).mockReturnValue({});
+
     render(
       <DaysContext.Provider value={{ ...props }}>
-        <CheckDayTemplate text="lunes" />
+        <CheckDayTemplate text="domingo" />
       </DaysContext.Provider>,
     );
-
-    const hourInputs = screen.getAllByLabelText("input-hour");
-
-    expect(hourInputs.length).toBe(4);
   });
 
-  test("should delete inputs", async () => {
-    renderHook(() => {
-      useMultipleInputs("lunes");
+  test("should render 2 inputs", () => {
+    const mockFormAvailableDays = {
+      day: "domingo",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
     });
+
     render(
       <DaysContext.Provider value={{ ...props }}>
         <CheckDayTemplate text="lunes" />
       </DaysContext.Provider>,
     );
 
-    fireEvent.click(screen.getAllByRole("button", { name: "-" })[2]);
-    const hourInputs = screen.getAllByLabelText("input-hour");
-
-    expect(hourInputs.length).toBe(3);
+    expect(screen.getAllByRole("textbox").length).toBe(2);
+    // screen.debug();
   });
 
-  test("should add inputs", async () => {
-    renderHook(() => {
-      return useMultipleInputs("lunes");
+  test("should dispatch addStep", () => {
+    const mockFormAvailableDays = {
+      day: "domingo",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
+      addStep: mockAddStep,
     });
 
     render(
@@ -72,49 +81,54 @@ describe("test CheckDayTemplate", () => {
         <CheckDayTemplate text="lunes" />
       </DaysContext.Provider>,
     );
+    fireEvent.click(screen.getAllByRole("button", { name: "+" })[0]);
 
-    fireEvent.click(screen.getAllByRole("button", { name: "+" })[2]);
-
-    expect(screen.getAllByLabelText("input-hour").length).toBe(4);
+    expect(mockAddStep).toHaveBeenCalled();
   });
 
-  test("should can write on inputs", async () => {
-    renderHook(() => {
-      useMultipleInputs("lunes");
+  test("should dispatch removeStep", () => {
+    const mockFormAvailableDays = {
+      day: "domingo",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
+      deleteStep: mockDeleteStep,
     });
+
     render(
       <DaysContext.Provider value={{ ...props }}>
         <CheckDayTemplate text="lunes" />
       </DaysContext.Provider>,
     );
+    fireEvent.click(screen.getAllByRole("button", { name: "-" })[0]);
 
-    fireEvent.change(screen.getAllByLabelText("input-hour")[3], {
-      target: { value: "asd" },
-    });
-
-    await waitFor(async () => {
-      expect(screen.getByPlaceholderText("Horario N 3")).toBeInTheDocument();
-    });
-    expect(screen.getByPlaceholderText("Horario N 3")).toHaveValue("asd");
+    expect(mockDeleteStep).toHaveBeenCalled();
   });
 
-  test("should cant add more inputs if textfield is empty", async () => {
-    renderHook(() => {
-      useMultipleInputs("lunes");
+  test("should dispatch handleChangeStep", () => {
+    const mockFormAvailableDays = {
+      day: "domingo",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
+      handleChangeStep: mockHandleChangeStep,
     });
+
     render(
       <DaysContext.Provider value={{ ...props }}>
         <CheckDayTemplate text="lunes" />
       </DaysContext.Provider>,
     );
-
-    fireEvent.change(screen.getAllByLabelText("input-hour")[3], {
-      target: { value: "asd" },
+    fireEvent.change(screen.getAllByRole("textbox")[0], {
+      target: { value: "joder" },
     });
 
-    await waitFor(async () => {
-      expect(screen.getByPlaceholderText("Horario N 3")).toBeInTheDocument();
-    });
-    expect(screen.getByPlaceholderText("Horario N 3")).toHaveValue("asd");
+    expect(mockHandleChangeStep).toHaveBeenCalled();
   });
 });
