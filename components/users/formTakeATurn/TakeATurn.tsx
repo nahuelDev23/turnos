@@ -26,15 +26,14 @@ export const TakeATurn = () => {
     form,
   } = useTakeATurn(availableDays);
 
-  const isWeekday = (date: Date) => {
+  const isAvailableDay = (date: Date) => {
     const day = date.getDay();
 
     const listToDisableDayInNumber = numbersOfDaysToDelete(availableDays);
 
-    const isDayInCalendarInListToDisable =
-      listToDisableDayInNumber.includes(day);
+    const isDayCalendarInListToDisable = listToDisableDayInNumber.includes(day);
 
-    return !isDayInCalendarInListToDisable;
+    return !isDayCalendarInListToDisable;
   };
 
   if (errorAvailableDays)
@@ -62,7 +61,7 @@ export const TakeATurn = () => {
       <Stack color="black">
         {availableDays ? (
           <DatePicker
-            filterDate={isWeekday}
+            filterDate={isAvailableDay}
             minDate={moment().toDate()}
             selected={startDate}
             onChange={(date: Date) => setStartDate(date)}
