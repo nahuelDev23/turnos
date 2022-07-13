@@ -24,6 +24,7 @@ export const InputHour: FC<Props> = ({
     <>
       <Input
         required
+        aria-label="input-hour"
         className="w-full rounded shadow p-2 mb-4 text-black rounded-tr-none"
         name="hours"
         placeholder={`Horario N ${index}`}
