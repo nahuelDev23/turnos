@@ -1,9 +1,10 @@
 import { Stack, Text, Heading } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import useSWR from "swr";
+import moment from "moment";
 
 import { useTakeATurn } from "../../../hooks/useTakeATurn";
-import { turnOffDaysInCalendarNumberFormat } from "../../../helpers/turnOffDaysInCalendarNumberFormat";
+import { numbersOfDaysToDelete } from "../../../helpers/numbersOfDaysToDelete";
 
 import { Form } from "./Form";
 
@@ -28,8 +29,8 @@ export const TakeATurn = () => {
   const isWeekday = (date: Date) => {
     const day = date.getDay();
 
-    const listToDisableDayInNumber =
-      turnOffDaysInCalendarNumberFormat(availableDays);
+    const listToDisableDayInNumber = numbersOfDaysToDelete(availableDays);
+
     const isDayInCalendarInListToDisable =
       listToDisableDayInNumber.includes(day);
 
@@ -63,6 +64,7 @@ export const TakeATurn = () => {
         {availableDays ? (
           <DatePicker
             filterDate={isWeekday}
+            minDate={moment().toDate()}
             selected={startDate}
             onChange={(date: Date) => setStartDate(date)}
           />

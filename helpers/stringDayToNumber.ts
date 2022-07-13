@@ -1,4 +1,4 @@
-export const stringDayToNumber = (day: string) => {
+export const stringDayToNumber = (day: string): number => {
   switch (day) {
     case "domingo":
       return 0;
@@ -15,6 +15,6 @@ export const stringDayToNumber = (day: string) => {
     case "sabado":
       return 6;
     default:
-      break;
+      return 7;
   }
 };

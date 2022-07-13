@@ -13,18 +13,18 @@ jest.mock("../../../hooks/useTakeATurn");
 jest.mock("swr");
 
 describe("Test on TakeATurn", () => {
-  const mockSubmit = jest.fn();
-  const mockOnInputChange = jest.fn();
-  const mockSetStartDate = jest.fn();
+  // const mockSubmit = jest.fn();
+  // const mockOnInputChange = jest.fn();
+  // const mockSetStartDate = jest.fn();
 
   (useTakeATurn as jest.Mock).mockReturnValue({
-    onSubmit: mockSubmit,
-    onInputChange: mockOnInputChange,
-    error: undefined,
-    success: undefined,
-    hoursPerDay: [],
+    // onSubmit: mockSubmit,
+    // onInputChange: mockOnInputChange,
+    // error: undefined,
+    // success: undefined,
+    // hoursPerDay: [],
     startDate: new Date(new Date().setHours(0, 0, 0, 0)),
-    setStartDate: mockSetStartDate,
+    // setStartDate: mockSetStartDate,
     form: emptyForm,
   });
 

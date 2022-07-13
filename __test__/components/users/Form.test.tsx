@@ -5,7 +5,10 @@ import { Form } from "../../../components/users/formTakeATurn/Form";
 import { emptyForm, filledForm } from "../../fixtures";
 import { responseAvailableDaysFilled } from "../../fixtures/availableDays";
 
-jest.mock("../../../hooks/useTakeATurn");
+// jest.mock("../../../hooks/useTakeATurn", () => ({
+//   ...jest.requireActual("../../../hooks/useTakeATurn"),
+//   mockSubmit: () => jest.fn((e) => e.preventDefault()),
+// }));
 
 describe("Test users/Form", () => {
   const mockSubmit = jest.fn((e) => e.preventDefault());
