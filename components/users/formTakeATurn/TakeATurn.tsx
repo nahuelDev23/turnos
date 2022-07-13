@@ -56,7 +56,6 @@ export const TakeATurn = () => {
       <Form
         form={form}
         hoursPerDay={hoursPerDay}
-        // (e)=>onInputChange(e)
         onInputChange={onInputChange}
         onSubmit={onSubmit}
       />
