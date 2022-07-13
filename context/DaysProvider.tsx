@@ -91,7 +91,6 @@ export const DaysProvider: FC<Props> = ({ children }) => {
     }
   };
 
-  // todo hacer en test fixed data raw
   const fillDaysData = (data: RawAvailableDaysFromDb[]) => {
     dispatch({
       type: "SET_DAYS_DATA",
@@ -138,7 +137,6 @@ export const DaysProvider: FC<Props> = ({ children }) => {
         ...state,
         addFormToFormData,
         sendForm,
-
         removeDay,
       }}
     >
