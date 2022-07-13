@@ -28,14 +28,17 @@ export default function handler(
     case "POST":
       return postAvailableDays(req, res);
     case "GET":
-      return getDays(req, res);
+      return getAvailableDays(req, res);
 
     default:
       return res.status(400).json({ ok: false, message: "Bad request" });
   }
 }
 
-const getDays = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const getAvailableDays = async (
+  req: NextApiRequest,
+  res: NextApiResponse<any>,
+) => {
   try {
     await db.connect();
 

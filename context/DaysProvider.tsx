@@ -1,6 +1,11 @@
 import React, { FC, useReducer, useEffect } from "react";
 
-import { IDaysHours, daysString } from "../interface/IAvailableDays";
+import {
+  IDaysHours,
+  daysString,
+  RawAvailableDaysFromDb,
+} from "../interface/IAvailableDays";
+import { formatDataAvailableDays } from "../helpers/formatDataAvailableDays";
 
 import { DaysContext } from "./DaysContext";
 import { daysReducer } from "./daysReducer";
@@ -25,7 +30,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
 
   const removeDay = (day: daysString) => {
     dispatch({
-      type: "SET_REMOVE_DAY_FROM_FORM_DATA",
+      type: "SET_FORM_DATA",
       payload: state.formData.filter((item) => item.day !== day),
     });
   };
@@ -75,32 +80,29 @@ export const DaysProvider: FC<Props> = ({ children }) => {
       type: "LOADING_FORM_DATA",
       payload: true,
     });
-    const res = await fetch("/api/admin/availableDays");
-    const data = await res.json();
+    const response = await fetch("/api/admin/availableDays");
+    const availableDaysList: RawAvailableDaysFromDb[] = await response.json();
 
-    if (data) {
-      fillFormData(data);
+    // todo ver de sacar fill days data o que hace
+    if (availableDaysList) {
+      fillFormData(availableDaysList);
 
-      fillDaysData(data);
+      fillDaysData(availableDaysList);
     }
   };
 
-  const fillDaysData = (data: IDaysHours[]) => {
+  // todo hacer en test fixed data raw
+  const fillDaysData = (data: RawAvailableDaysFromDb[]) => {
     dispatch({
       type: "SET_DAYS_DATA",
       payload: data,
     });
   };
 
-  const fillFormData = (data: IDaysHours[]) => {
-    const formDataFromDB = data.map((item: IDaysHours) => ({
-      day: item.day,
-      hours: item.hours,
-    }));
-
+  const fillFormData = (data: RawAvailableDaysFromDb[]) => {
     dispatch({
       type: "SET_FORM_DATA",
-      payload: formDataFromDB,
+      payload: formatDataAvailableDays(data),
     });
   };
 
