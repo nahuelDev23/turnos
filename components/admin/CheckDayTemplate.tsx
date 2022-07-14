@@ -20,7 +20,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
     addStep,
     deleteStep,
     formAvailableDays,
-    isPreviousInputEmpty,
+    isSomeInputEmpty,
     handleChangeStep,
     setFormAvailableDays,
   } = useMultipleInputs(text);
@@ -88,7 +88,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
               deleteStep={deleteStep}
               handleChangeStep={handleChangeStep}
               index={index}
-              isPreviousInputEmpty={isPreviousInputEmpty}
+              isSomeInputEmpty={isSomeInputEmpty}
               times={times}
             />
           </div>

@@ -31,23 +31,14 @@ export const useMultipleInputs = (text: daysString) => {
     setFormAvailableDays(values);
   };
 
-  const isPreviousInputEmpty = useMemo(() => {
-    // todo esto no hace lo que dice
-    // is current filled podría ser
-    const first =
-      formAvailableDays.hours.length === 1 &&
-      formAvailableDays.hours[0].time === "";
-    const second =
-      formAvailableDays.hours.length > 1 &&
-      formAvailableDays.hours[formAvailableDays.hours.length - 1].time === "";
-
-    return first || second;
+  const isSomeInputEmpty = useMemo(() => {
+    return formAvailableDays.hours.some((item) => item.time === "");
   }, [formAvailableDays]);
 
   return {
     // values
 
-    isPreviousInputEmpty,
+    isSomeInputEmpty,
     // methods
     addStep,
     deleteStep,

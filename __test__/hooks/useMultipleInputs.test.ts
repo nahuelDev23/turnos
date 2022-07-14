@@ -74,10 +74,10 @@ describe("test useMultipleInputs", () => {
     const day = "lunes";
     const { result } = renderHook(() => useMultipleInputs(day));
 
-    expect(result.current.isPreviousInputEmpty).toBe(true);
+    expect(result.current.isSomeInputEmpty).toBe(true);
   });
 
-  test("should have isPreviousInputEmpty false if time is filled and have only one time", () => {
+  test("should have isSomeInputEmpty false if time is filled and have only one time", () => {
     const day = "lunes";
     const { result } = renderHook(() => useMultipleInputs(day));
     const { handleChangeStep } = result.current;
@@ -86,10 +86,10 @@ describe("test useMultipleInputs", () => {
       handleChangeStep({ target: { value: "9:00" } }, 0);
     });
 
-    expect(result.current.isPreviousInputEmpty).toBe(false);
+    expect(result.current.isSomeInputEmpty).toBe(false);
   });
 
-  test("should have isPreviousInputEmpty true if the first if filled and the new not", () => {
+  test("should have isSomeInputEmpty true if the first if filled and the new not", () => {
     const day = "lunes";
     const { result } = renderHook(() => useMultipleInputs(day));
     const { handleChangeStep, addStep } = result.current;
@@ -102,10 +102,10 @@ describe("test useMultipleInputs", () => {
       addStep();
     });
 
-    expect(result.current.isPreviousInputEmpty).toBe(true);
+    expect(result.current.isSomeInputEmpty).toBe(true);
   });
 
-  test("should have isPreviousInputEmpty false if the first if filled and the new too is filled", () => {
+  test("should have isSomeInputEmpty false if the first if filled and the new too is filled", () => {
     const day = "lunes";
     const { result } = renderHook(() => useMultipleInputs(day));
     const { handleChangeStep, addStep } = result.current;
@@ -122,6 +122,6 @@ describe("test useMultipleInputs", () => {
       handleChangeStep({ target: { value: "9:00" } }, 1);
     });
 
-    expect(result.current.isPreviousInputEmpty).toBe(false);
+    expect(result.current.isSomeInputEmpty).toBe(false);
   });
 });

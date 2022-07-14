@@ -131,4 +131,70 @@ describe("test CheckDayTemplate", () => {
 
     expect(mockHandleChangeStep).toHaveBeenCalled();
   });
+
+  test("should hidden inputHour When click on buttonDay if already have times", () => {
+    const mockFormAvailableDays = {
+      day: "lunes",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
+    });
+
+    render(
+      <DaysContext.Provider value={{ ...props }}>
+        <CheckDayTemplate text="lunes" />
+      </DaysContext.Provider>,
+    );
+
+    expect(screen.getAllByLabelText("input-hour").length).toBe(2);
+
+    fireEvent.click(screen.getByRole("button", { name: "lunes" }));
+
+    expect(screen.queryAllByLabelText("input-hour").length).toBe(0);
+  });
+
+  test("should show loading if isLoadingFormData is true ", () => {
+    const mockFormAvailableDays = {
+      day: "lunes",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
+    });
+    props.isLoadingFormData = true;
+    render(
+      <DaysContext.Provider value={{ ...props }}>
+        <CheckDayTemplate text="lunes" />
+      </DaysContext.Provider>,
+    );
+
+    expect(screen.getByText("buscando horarios en db")).toBeInTheDocument();
+  });
+
+  test("should NOT show loading if isLoadingFormData is false ", () => {
+    const mockFormAvailableDays = {
+      day: "lunes",
+      hours: [{ time: "10:00" }, { time: "9:00" }],
+    };
+
+    (useMultipleInputs as jest.Mock).mockReturnValue({
+      formAvailableDays: mockFormAvailableDays,
+      setFormAvailableDays: mockSetFormAvailableDays,
+    });
+    props.isLoadingFormData = false;
+    render(
+      <DaysContext.Provider value={{ ...props }}>
+        <CheckDayTemplate text="lunes" />
+      </DaysContext.Provider>,
+    );
+
+    expect(
+      screen.queryByText("buscando horarios en db"),
+    ).not.toBeInTheDocument();
+  });
 });

@@ -9,7 +9,7 @@ interface Props {
   times: IAvailableHours;
   addStep: () => void;
   deleteStep: (index: number) => void;
-  isPreviousInputEmpty: boolean;
+  isSomeInputEmpty: boolean;
 }
 
 // todo usemultipleinputs hacer test
@@ -19,7 +19,7 @@ export const InputHour: FC<Props> = ({
   times,
   addStep,
   deleteStep,
-  isPreviousInputEmpty,
+  isSomeInputEmpty,
 }) => {
   return (
     <>
@@ -35,7 +35,7 @@ export const InputHour: FC<Props> = ({
       />
       <Button
         className="h-full py-2 px-4 bg-yellow-300 rounded-tr rounded-br mr-2"
-        disabled={isPreviousInputEmpty}
+        disabled={isSomeInputEmpty}
         onClick={addStep}
       >
         +
