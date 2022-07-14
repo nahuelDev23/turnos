@@ -12,7 +12,6 @@ interface Props {
   isSomeInputEmpty: boolean;
 }
 
-// todo usemultipleinputs hacer test
 export const InputHour: FC<Props> = ({
   handleChangeStep,
   index,
