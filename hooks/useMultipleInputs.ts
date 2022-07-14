@@ -32,6 +32,8 @@ export const useMultipleInputs = (text: daysString) => {
   };
 
   const isPreviousInputEmpty = useMemo(() => {
+    // todo esto no hace lo que dice
+    // is current filled podría ser
     const first =
       formAvailableDays.hours.length === 1 &&
       formAvailableDays.hours[0].time === "";
