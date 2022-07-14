@@ -1,8 +1,10 @@
 import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { Stack, Text } from "@chakra-ui/react";
 
 import { DaysContext } from "../../context/DaysContext";
 import { useMultipleInputs } from "../../hooks/useMultipleInputs";
 import { daysString, IAvailableHours } from "../../interface/IAvailableDays";
+import { SkeletonLoadingTimes } from "../UI/SkeletonLoadingTimes";
 
 import { ButtonDay } from "./form/ButtonDay";
 import { InputHour } from "./form/InputHour";
@@ -14,6 +16,7 @@ interface Props {
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
   const { addFormToFormData, daysData, isLoadingFormData, removeDay } =
     useContext(DaysContext);
+
   const [isActiveDay, setIsActiveDay] = useState(false);
 
   const {
@@ -67,26 +70,28 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
 
   return (
     <>
-      <ButtonDay
-        haveAtLastOneTime={isActiveDay}
-        isLoadingFormData={isLoadingFormData}
-        setDayAvailable={setDayAvailable}
-        text={text}
-      />
-      {isLoadingFormData && "buscando horarios en db"}
-      {isActiveDay &&
-        formAvailableDays.hours.map((times: any, index: number) => (
-          <div key={index} className="flex">
-            <InputHour
-              addStep={addStep}
-              deleteStep={deleteStep}
-              handleChangeStep={handleChangeStep}
-              index={index}
-              isSomeInputEmpty={isSomeInputEmpty}
-              times={times}
-            />
-          </div>
-        ))}
+      <Stack>
+        <ButtonDay
+          haveAtLastOneTime={isActiveDay}
+          isLoadingFormData={isLoadingFormData}
+          setDayAvailable={setDayAvailable}
+          text={text}
+        />
+        {isLoadingFormData && <SkeletonLoadingTimes />}
+        {isActiveDay &&
+          formAvailableDays.hours.map((times: any, index: number) => (
+            <div key={index} className="flex">
+              <InputHour
+                addStep={addStep}
+                deleteStep={deleteStep}
+                handleChangeStep={handleChangeStep}
+                index={index}
+                isSomeInputEmpty={isSomeInputEmpty}
+                times={times}
+              />
+            </div>
+          ))}
+      </Stack>
     </>
   );
 };

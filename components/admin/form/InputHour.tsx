@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Input, Button } from "@chakra-ui/react";
+import { Input, Button, Stack } from "@chakra-ui/react";
 
 import { IAvailableHours } from "../../../interface";
 
@@ -22,7 +22,7 @@ export const InputHour: FC<Props> = ({
   isSomeInputEmpty,
 }) => {
   return (
-    <>
+    <Stack direction="row">
       <Input
         required
         aria-label="input-hour"
@@ -33,21 +33,23 @@ export const InputHour: FC<Props> = ({
         value={times.time}
         onChange={(event) => handleChangeStep(event, index)}
       />
-      <Button
-        className="h-full py-2 px-4 bg-yellow-300 rounded-tr rounded-br mr-2"
-        disabled={isSomeInputEmpty}
-        onClick={addStep}
-      >
-        +
-      </Button>
-      {index > 0 && (
+      <Stack direction="row">
         <Button
-          className="h-full py-2 px-4 px-2  bg-red-300 text-black rounded"
-          onClick={() => deleteStep(index)}
+          className="h-full py-2 px-4 bg-yellow-300 rounded-tr rounded-br mr-2"
+          disabled={isSomeInputEmpty}
+          onClick={addStep}
         >
-          -
+          +
         </Button>
-      )}
-    </>
+        {index > 0 && (
+          <Button
+            className="h-full py-2 px-4 px-2  bg-red-300 text-black rounded"
+            onClick={() => deleteStep(index)}
+          >
+            -
+          </Button>
+        )}
+      </Stack>
+    </Stack>
   );
 };

@@ -16,7 +16,11 @@ export const ButtonDay: FC<Props> = ({
 }) => {
   return (
     <Button
-      bgColor={haveAtLastOneTime ? "green.600" : undefined}
+      _hover={{ backgroundColor: "rgba(0,0,0,.1)" }}
+      bgColor={haveAtLastOneTime ? "blue.700" : "transparent"}
+      border={haveAtLastOneTime ? undefined : "2px solid"}
+      borderStyle={haveAtLastOneTime ? undefined : "dashed"}
+      color="white"
       disabled={isLoadingFormData}
       onClick={setDayAvailable}
     >
