@@ -14,7 +14,7 @@ interface Props {
 export const CheckDayTemplate: FC<Props> = ({ text }) => {
   const { addFormToFormData, daysData, isLoadingFormData, removeDay } =
     useContext(DaysContext);
-  const [toggleDisableDay, setToggleDisableDay] = useState(false);
+  const [isActiveDay, setIsActiveDay] = useState(false);
 
   const {
     addStep,
@@ -26,7 +26,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
   } = useMultipleInputs(text);
 
   const setDayAvailable = () => {
-    setToggleDisableDay((isAvailable) => !isAvailable);
+    setIsActiveDay((isAvailable) => !isAvailable);
   };
   const currentDayComponent = useMemo(
     () => daysData.find((item) => item.day === text),
@@ -47,7 +47,7 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
         (item: IAvailableHours) => item.time !== "",
       );
 
-      setToggleDisableDay(hasAtLastOneTimeSetted);
+      setIsActiveDay(hasAtLastOneTimeSetted);
 
       setFormAvailableDays({
         day: currentDayComponent.day,
@@ -57,30 +57,24 @@ export const CheckDayTemplate: FC<Props> = ({ text }) => {
   }, [daysData]);
 
   useEffect(() => {
-    if (!toggleDisableDay) return removeDay(text);
-
-    // if (currentDayComponent)
-    //   return setFormAvailableDays({
-    //     day: currentDayComponent.day,
-    //     hours: currentDayComponent.hours,
-    //   });
+    if (!isActiveDay) return removeDay(text);
 
     setFormAvailableDays({
       day: formAvailableDays.day,
       hours: formAvailableDays.hours,
     });
-  }, [toggleDisableDay]);
+  }, [isActiveDay]);
 
   return (
     <>
       <ButtonDay
-        haveAtLastOneTime={toggleDisableDay}
+        haveAtLastOneTime={isActiveDay}
         isLoadingFormData={isLoadingFormData}
         setDayAvailable={setDayAvailable}
         text={text}
       />
       {isLoadingFormData && "buscando horarios en db"}
-      {toggleDisableDay &&
+      {isActiveDay &&
         formAvailableDays.hours.map((times: any, index: number) => (
           <div key={index} className="flex">
             <InputHour
