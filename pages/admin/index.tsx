@@ -1,4 +1,5 @@
 import { Button, Container, Grid, Heading, Stack } from "@chakra-ui/react";
+import { signOut } from "next-auth/react";
 import { useContext } from "react";
 
 import { CheckDayTemplate } from "../../components/admin/CheckDayTemplate";
@@ -9,6 +10,7 @@ const index = () => {
 
   return (
     <Container maxW="container.xxl">
+      <Button onClick={() => signOut()}>Logout</Button>
       <Stack>
         <Heading>Panel admin</Heading>
         <Grid gap="1rem" gridTemplateColumns="repeat(7,1fr)">
