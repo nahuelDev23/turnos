@@ -156,7 +156,7 @@ describe("test CheckDayTemplate", () => {
     expect(screen.queryAllByLabelText("input-hour").length).toBe(0);
   });
 
-  test("should show loading if isLoadingFormData is true ", () => {
+  test("should show loading skeleton if isLoadingFormData is true ", () => {
     const mockFormAvailableDays = {
       day: "lunes",
       hours: [{ time: "10:00" }, { time: "9:00" }],
@@ -173,7 +173,7 @@ describe("test CheckDayTemplate", () => {
       </DaysContext.Provider>,
     );
 
-    expect(screen.getByText("buscando horarios en db")).toBeInTheDocument();
+    expect(screen.getByTestId("skeleton")).toBeInTheDocument();
   });
 
   test("should NOT show loading if isLoadingFormData is false ", () => {
