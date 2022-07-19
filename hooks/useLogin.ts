@@ -1,6 +1,6 @@
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FormEvent, useState, ChangeEventHandler } from "react";
+import { FormEvent, useState, ChangeEventHandler, ChangeEvent } from "react";
 
 interface AuthInputs {
   email: string;
@@ -30,7 +30,7 @@ export const useLogin = () => {
     }
   };
 
-  const onInputLoginChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onInputLoginChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormAuth({ ...formAuth, [event.target.name]: event.target.value });
   };
 

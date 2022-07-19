@@ -9,9 +9,22 @@ export async function middleware(req: NextRequest | any, ev: NextFetchEvent) {
     });
 
     if (!session) {
-      const { origin, pathname } = req.nextUrl.clone();
+      const { origin } = req.nextUrl.clone();
 
-      return NextResponse.rewrite(`${origin}/auth/login?p=${pathname}`);
+      return NextResponse.rewrite(`${origin}/auth/login`);
+    }
+  }
+
+  if (req.nextUrl.pathname === "/auth/login") {
+    const session: any = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+
+    if (session) {
+      const { origin } = req.nextUrl.clone();
+
+      return NextResponse.redirect(`${origin}`);
     }
   }
 }
