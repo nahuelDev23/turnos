@@ -5,9 +5,17 @@ import { ChangeEvent } from "react";
 
 import { useLogin } from "../../hooks/useLogin";
 
-jest.mock("next-auth/react");
+const mockPush = jest.fn();
 
-// todo testear el push del router
+jest.mock("next-auth/react");
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      push: mockPush,
+    };
+  },
+}));
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
@@ -28,7 +36,7 @@ describe("test useLogin", () => {
   test("should call singIn when submit login", async () => {
     const mockSignIn = signIn as jest.MockedFunction<typeof signIn>;
 
-    (signIn as jest.Mock).mockResolvedValue({});
+    (signIn as jest.Mock).mockResolvedValue({ ok: true });
 
     const { result } = renderHook(() => useLogin());
     const { onSubmitLogin } = result.current;
@@ -43,6 +51,8 @@ describe("test useLogin", () => {
       password: "",
       redirect: false,
     });
+
+    expect(mockPush).toHaveBeenCalled();
   });
 
   test("should call singOut when submit logOut", async () => {

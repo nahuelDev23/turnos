@@ -13,24 +13,22 @@ const initialFormAuthValues = {
 
 export const useLogin = () => {
   const [formAuth, setFormAuth] = useState<AuthInputs>(initialFormAuthValues);
+
   const router = useRouter();
+
   const { email, password } = formAuth;
 
   const onSubmitLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = (await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })) as any;
+    const response = (await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    })) as any;
 
-      if (response.ok) {
-        router.push("/admin");
-      }
-    } catch (error) {
-      console.log("aca", error);
+    if (response.ok) {
+      router.push("/admin");
     }
   };
 
