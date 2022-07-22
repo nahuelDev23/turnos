@@ -28,9 +28,7 @@ describe("test useLogin", () => {
   test("should call singIn when submit login", async () => {
     const mockSignIn = signIn as jest.MockedFunction<typeof signIn>;
 
-    (signIn as jest.Mock).mockResolvedValue({
-      response: { ok: 200 },
-    });
+    (signIn as jest.Mock).mockResolvedValue({});
 
     const { result } = renderHook(() => useLogin());
     const { onSubmitLogin } = result.current;

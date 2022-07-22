@@ -3,7 +3,7 @@ import { Button } from "@chakra-ui/react";
 import { PublicLayout } from "../../components/Layout/PublicLayout";
 import { useLogin } from "../../hooks/useLogin";
 
-const login = () => {
+const Login = () => {
   const { onSubmitLogin, email, password, onInputLoginChange } = useLogin();
 
   return (
@@ -13,6 +13,7 @@ const login = () => {
         <label htmlFor="email">
           Email
           <input
+            aria-label="email"
             name="email"
             type="text"
             value={email}
@@ -22,6 +23,7 @@ const login = () => {
         <label htmlFor="password">
           Password
           <input
+            aria-label="password"
             name="password"
             type="text"
             value={password}
@@ -34,4 +36,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

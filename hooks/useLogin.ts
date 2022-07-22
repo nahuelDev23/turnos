@@ -1,6 +1,6 @@
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FormEvent, useState, ChangeEventHandler, ChangeEvent } from "react";
+import { FormEvent, useState, ChangeEvent } from "react";
 
 interface AuthInputs {
   email: string;
@@ -19,14 +19,18 @@ export const useLogin = () => {
   const onSubmitLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    const response = (await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    })) as any;
+    try {
+      const response = (await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      })) as any;
 
-    if (response.ok) {
-      router.push("/admin");
+      if (response.ok) {
+        router.push("/admin");
+      }
+    } catch (error) {
+      console.log("aca", error);
     }
   };
 
