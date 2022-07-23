@@ -1,14 +1,15 @@
-import { Button, Container, Grid, Heading, Stack } from "@chakra-ui/react";
+import { Button, Grid, Heading, Stack } from "@chakra-ui/react";
 import { useContext } from "react";
 
 import { CheckDayTemplate } from "../../components/admin/CheckDayTemplate";
+import { AdminLayout } from "../../components/Layout/AdminLayout";
 import { DaysContext } from "../../context/DaysContext";
 
 const index = () => {
   const { sendForm } = useContext(DaysContext);
 
   return (
-    <Container maxW="container.xxl">
+    <AdminLayout>
       <Stack>
         <Heading>Panel admin</Heading>
         <Grid gap="1rem" gridTemplateColumns="repeat(7,1fr)">
@@ -23,7 +24,7 @@ const index = () => {
 
         <Button onClick={sendForm}>Guardar cambios</Button>
       </Stack>
-    </Container>
+    </AdminLayout>
   );
 };
 
