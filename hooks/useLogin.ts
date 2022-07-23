@@ -13,7 +13,7 @@ const initialFormAuthValues = {
 
 export const useLogin = () => {
   const [formAuth, setFormAuth] = useState<AuthInputs>(initialFormAuthValues);
-
+  const [errorLogin, setErrorLogin] = useState<boolean>(false);
   const router = useRouter();
 
   const { email, password } = formAuth;
@@ -27,9 +27,9 @@ export const useLogin = () => {
       redirect: false,
     })) as any;
 
-    if (response.ok) {
-      router.push("/admin");
-    }
+    if (response.ok) router.push("/admin");
+
+    if (!response.ok) setErrorLogin(true);
   };
 
   const onInputLoginChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -43,5 +43,6 @@ export const useLogin = () => {
     onSubmitLogin,
     onInputLoginChange,
     logOut,
+    errorLogin,
   };
 };

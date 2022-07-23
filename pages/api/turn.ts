@@ -7,10 +7,17 @@ import { db } from "../../database";
 import { ITurnForm, ITurnDB } from "../../interface/ITurn";
 import { numberDayToString } from "../../helpers/numberDayToString";
 import AvailableDays from "../../models/AvailableDays";
+
 type Data = {
   ok: boolean;
-  message: string;
+  message?: string;
   turn?: ITurnForm;
+};
+
+type IListTurns = {
+  ok: boolean;
+  listTurns?: ITurnDB[];
+  message?: string;
 };
 
 export default function handler(
@@ -18,6 +25,8 @@ export default function handler(
   res: NextApiResponse<Data>,
 ) {
   switch (req.method) {
+    case "GET":
+      return getAllTurns(req, res);
     case "POST":
       return postTurn(req, res);
 
@@ -25,6 +34,28 @@ export default function handler(
       return res.status(400).json({ ok: false, message: "Bad request" });
   }
 }
+
+const getAllTurns = async (
+  req: NextApiRequest,
+  res: NextApiResponse<IListTurns>,
+) => {
+  try {
+    await db.connect();
+    const listTurns = await Turn.find();
+
+    await db.disconnect();
+
+    return res.status(200).json({
+      ok: true,
+      listTurns,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+};
 
 const getTurnByDate = async (day: Date): Promise<ITurnDB[]> => {
   const turn = await Turn.find({ day: new Date(day) });
@@ -35,6 +66,7 @@ const getTurnByDate = async (day: Date): Promise<ITurnDB[]> => {
 
   return todayTurns;
 };
+
 const postTurn = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { hour, day, name, dni, phone } = JSON.parse(req.body);
 

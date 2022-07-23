@@ -2,7 +2,7 @@ import { Button, Grid, Heading, Stack } from "@chakra-ui/react";
 import { useContext } from "react";
 
 import { CheckDayTemplate } from "../../components/admin/CheckDayTemplate";
-import { AdminLayout } from "../../components/Layout/AdminLayout";
+import { AdminLayout } from "../../components/admin/layout/AdminLayout";
 import { DaysContext } from "../../context/DaysContext";
 
 const index = () => {

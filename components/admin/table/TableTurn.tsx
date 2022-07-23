@@ -1,10 +1,11 @@
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { FC } from "react";
+import Moment from "react-moment";
 
-import { ITurnForm } from "../../interface/ITurn";
+import { ITurnDB, ITurnForm } from "../../../interface/ITurn";
 
 interface Props {
-  turnsView: ITurnForm[];
+  turnsView: ITurnDB[];
 }
 
 export const TableTurn: FC<Props> = ({ turnsView }) => {
@@ -27,7 +28,7 @@ export const TableTurn: FC<Props> = ({ turnsView }) => {
               <Td>{turn.phone}</Td>
               <Td>{turn.hour}</Td>
               <Td>{turn.dni}</Td>
-              <Td>{turn.day.toString()}</Td>
+              <Td>{<Moment format="DD/MM/YYYY">{turn.day}</Moment>}</Td>
             </Tr>
           ))}
         </Tbody>

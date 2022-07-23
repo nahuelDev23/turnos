@@ -4,8 +4,8 @@ import { Stack } from "@chakra-ui/react";
 import { DaysContext } from "../../context/DaysContext";
 import { useMultipleInputs } from "../../hooks/useMultipleInputs";
 import { daysString, IAvailableHours } from "../../interface/IAvailableDays";
-import { SkeletonLoadingTimes } from "../UI/SkeletonLoadingTimes";
 
+import { SkeletonLoadingTimes } from "./UI/SkeletonLoadingTimes";
 import { ButtonDay } from "./form/ButtonDay";
 import { InputHour } from "./form/InputHour";
 

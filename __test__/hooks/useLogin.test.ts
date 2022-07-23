@@ -30,6 +30,7 @@ describe("test useLogin", () => {
       onInputLoginChange: expect.any(Function),
       onSubmitLogin: expect.any(Function),
       password: "",
+      errorLogin: false,
     });
   });
 
@@ -53,6 +54,19 @@ describe("test useLogin", () => {
     });
 
     expect(mockPush).toHaveBeenCalled();
+  });
+
+  test("should set errorLogin to true", async () => {
+    (signIn as jest.Mock).mockResolvedValue({ ok: false });
+
+    const { result } = renderHook(() => useLogin());
+    const { onSubmitLogin } = result.current;
+
+    await act(async () => {
+      await onSubmitLogin({ preventDefault: jest.fn() } as any);
+    });
+
+    expect(result.current.errorLogin).toBe(true);
   });
 
   test("should call singOut when submit logOut", async () => {
