@@ -1,18 +1,34 @@
-import { Select, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Button,
+  Select,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { FC, useEffect } from "react";
 import Moment from "react-moment";
 import toast, { Toaster } from "react-hot-toast";
 
 import { ITurnDB, ITurnForm } from "../../../interface/ITurn";
-import { useTurn } from "../../../hooks/useTurn";
 
 interface Props {
   turnsView: ITurnDB[];
+  handleDelete: (_id: any) => void;
+  isErrorUpdate: boolean;
+  isSuccessUpdate: boolean;
+  onInputHourChange: (e: any, _id: any) => void;
 }
 
-export const TableTurn: FC<Props> = ({ turnsView }) => {
-  const { onInputHourChange, isSuccessUpdate, isErrorUpdate } = useTurn();
-
+export const TableTurn: FC<Props> = ({
+  handleDelete,
+  isErrorUpdate,
+  isSuccessUpdate,
+  turnsView,
+  onInputHourChange,
+}) => {
   useEffect(() => {
     isSuccessUpdate && toast.success("El horario se actualizo correctamente");
   }, [isSuccessUpdate]);
@@ -32,6 +48,7 @@ export const TableTurn: FC<Props> = ({ turnsView }) => {
             <Th>hora</Th>
             <Th>dni</Th>
             <Th>dia</Th>
+            <Th>Acciones</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -53,6 +70,9 @@ export const TableTurn: FC<Props> = ({ turnsView }) => {
               </Td>
               <Td>{turn.dni}</Td>
               <Td>{<Moment format="DD/MM/YYYY">{turn.day}</Moment>}</Td>
+              <Td>
+                <Button onClick={() => handleDelete(turn._id)}>Eliminar</Button>
+              </Td>
             </Tr>
           ))}
         </Tbody>

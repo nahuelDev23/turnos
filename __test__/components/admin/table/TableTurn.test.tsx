@@ -7,6 +7,7 @@ import { useTurn } from "../../../../hooks/useTurn";
 jest.mock("../../../../hooks/useTurn");
 
 const mockOnInputHourChange = jest.fn();
+const mockHandleDelete = jest.fn();
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -22,9 +23,9 @@ Object.defineProperty(window, "matchMedia", {
   })),
 });
 
-(useTurn as jest.Mock).mockReturnValue({
-  onInputHourChange: mockOnInputHourChange,
-});
+// (useTurn as jest.Mock).mockReturnValue({
+//   onInputHourChange: mockOnInputHourChange,
+// });
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -41,7 +42,15 @@ describe("Test TableTurn", () => {
       }),
     ) as any;
 
-    render(<TableTurn turnsView={filledTurns} />);
+    render(
+      <TableTurn
+        handleDelete={mockHandleDelete}
+        isErrorUpdate={false}
+        isSuccessUpdate={false}
+        turnsView={filledTurns}
+        onInputHourChange={mockOnInputHourChange}
+      />,
+    );
 
     expect(screen.getByText(/nombre/i)).toBeInTheDocument();
     expect(screen.getByText(/teléfono/i)).toBeInTheDocument();
@@ -51,13 +60,29 @@ describe("Test TableTurn", () => {
   });
 
   test("should render table with data", () => {
-    render(<TableTurn turnsView={filledTurns} />);
+    render(
+      <TableTurn
+        handleDelete={mockHandleDelete}
+        isErrorUpdate={false}
+        isSuccessUpdate={false}
+        turnsView={filledTurns}
+        onInputHourChange={mockOnInputHourChange}
+      />,
+    );
 
     expect(screen.getAllByRole("row").length).toBe(filledTurns.length + 1);
   });
 
   test("should change select", async () => {
-    render(<TableTurn turnsView={filledTurns} />);
+    render(
+      <TableTurn
+        handleDelete={mockHandleDelete}
+        isErrorUpdate={false}
+        isSuccessUpdate={false}
+        turnsView={filledTurns}
+        onInputHourChange={mockOnInputHourChange}
+      />,
+    );
 
     fireEvent.change(screen.getAllByLabelText("select")[0]);
 
@@ -68,7 +93,15 @@ describe("Test TableTurn", () => {
     (useTurn as jest.Mock).mockReturnValue({
       isSuccessUpdate: true,
     });
-    render(<TableTurn turnsView={filledTurns} />);
+    render(
+      <TableTurn
+        handleDelete={mockHandleDelete}
+        isErrorUpdate={false}
+        isSuccessUpdate={true}
+        turnsView={filledTurns}
+        onInputHourChange={mockOnInputHourChange}
+      />,
+    );
 
     expect(
       screen.getByText(/El horario se actualizo correctamente/i),
@@ -79,8 +112,36 @@ describe("Test TableTurn", () => {
     (useTurn as jest.Mock).mockReturnValue({
       isErrorUpdate: true,
     });
-    render(<TableTurn turnsView={filledTurns} />);
+    render(
+      <TableTurn
+        handleDelete={mockHandleDelete}
+        isErrorUpdate={true}
+        isSuccessUpdate={false}
+        turnsView={filledTurns}
+        onInputHourChange={mockOnInputHourChange}
+      />,
+    );
 
     expect(screen.getByText(/No se pudo actualizar el horario/i)).toBeTruthy();
+  });
+
+  test("should trigger delete", async () => {
+    (useTurn as jest.Mock).mockReturnValue({
+      isErrorUpdate: true,
+    });
+    render(
+      <TableTurn
+        handleDelete={mockHandleDelete}
+        isErrorUpdate={true}
+        isSuccessUpdate={false}
+        turnsView={filledTurns}
+        onInputHourChange={mockOnInputHourChange}
+      />,
+    );
+    const button = screen.getAllByRole("button", { name: /eliminar/i });
+
+    fireEvent.click(button[0]);
+    expect(mockHandleDelete).toHaveBeenCalled();
+    expect(mockHandleDelete).toHaveBeenCalledWith("ABC");
   });
 });
