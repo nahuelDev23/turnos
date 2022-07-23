@@ -62,6 +62,7 @@ const postAvailableDays = async (
   try {
     await db.connect();
 
+    // pasar a una funcion mas expresiva
     const filter = JSON.parse(req.body).filter(
       (item: IDaysHours) => item.hours[0].time !== "" && item.hours.length >= 1,
     );
