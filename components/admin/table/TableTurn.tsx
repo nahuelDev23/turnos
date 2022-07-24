@@ -66,6 +66,8 @@ export const TableTurn: FC<Props> = ({
                 >
                   <option>{turn.hour}</option>
                   <option>13:00</option>
+                  <option>13:15</option>
+                  <option>13:30</option>
                 </Select>
               </Td>
               <Td>{turn.dni}</Td>
