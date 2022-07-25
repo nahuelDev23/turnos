@@ -114,7 +114,7 @@ export const DaysProvider: FC<Props> = ({ children }) => {
     const response = await fetch("/api/admin/availableDays");
     const availableDaysList: RawAvailableDaysFromDb[] = await response.json();
 
-    if (availableDaysList) {
+    if (availableDaysList.length) {
       fillFormData(availableDaysList);
 
       fillDaysData(availableDaysList);

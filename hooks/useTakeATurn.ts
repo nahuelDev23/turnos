@@ -4,6 +4,11 @@ import { ITurnForm } from "../interface";
 import { numberDayToString } from "../helpers/numberDayToString";
 import { IDaysHours } from "../interface/IAvailableDays";
 
+interface IBadResponseDaysHours {
+  ok: boolean;
+  message: string;
+}
+
 export const useTakeATurn = (availableDays: IDaysHours[]) => {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
@@ -50,7 +55,10 @@ export const useTakeATurn = (availableDays: IDaysHours[]) => {
   }, [startDate]);
 
   useEffect(() => {
-    if (availableDays) {
+    if (
+      availableDays &&
+      (availableDays as unknown as IBadResponseDaysHours).ok === undefined
+    ) {
       const currentDay = numberDayToString(startDate.getDay());
 
       const todayHaveHours = availableDays.find(
