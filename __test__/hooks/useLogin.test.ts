@@ -25,11 +25,11 @@ describe("test useLogin", () => {
     const { result } = renderHook(() => useLogin());
 
     expect(result.current).toEqual({
-      email: "",
+      email: "nahuel@gmail.com",
       logOut: expect.any(Function),
       onInputLoginChange: expect.any(Function),
       onSubmitLogin: expect.any(Function),
-      password: "",
+      password: "123456",
       errorLogin: false,
     });
   });
@@ -48,8 +48,8 @@ describe("test useLogin", () => {
 
     expect(mockSignIn).toHaveBeenCalledTimes(1);
     expect(mockSignIn).toHaveBeenCalledWith("credentials", {
-      email: "",
-      password: "",
+      email: "nahuel@gmail.com",
+      password: "123456",
       redirect: false,
     });
 
