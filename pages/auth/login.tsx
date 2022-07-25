@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Input, FormLabel } from "@chakra-ui/react";
 
 import { PublicLayout } from "../../components/Layout/PublicLayout";
 import { useLogin } from "../../hooks/useLogin";
@@ -7,29 +7,28 @@ const Login = () => {
   const { onSubmitLogin, email, password, onInputLoginChange } = useLogin();
 
   return (
-    // todo cambiar por admin panel
     <PublicLayout>
       <form onSubmit={onSubmitLogin}>
-        <label htmlFor="email">
+        <FormLabel htmlFor="email">
           Email
-          <input
+          <Input
             aria-label="email"
             name="email"
             type="text"
             value={email}
             onChange={onInputLoginChange}
           />
-        </label>
-        <label htmlFor="password">
+        </FormLabel>
+        <FormLabel htmlFor="password">
           Password
-          <input
+          <Input
             aria-label="password"
             name="password"
-            type="text"
+            type="password"
             value={password}
             onChange={onInputLoginChange}
           />
-        </label>
+        </FormLabel>
         <Button type="submit">Ingresar</Button>
       </form>
     </PublicLayout>

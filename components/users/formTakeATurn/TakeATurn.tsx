@@ -1,10 +1,8 @@
-import { Stack, Text, Heading } from "@chakra-ui/react";
-import DatePicker from "react-datepicker";
+import { Text, Heading } from "@chakra-ui/react";
 import useSWR from "swr";
-import moment from "moment";
 
 import { useTakeATurn } from "../../../hooks/useTakeATurn";
-import { numbersOfDaysToDelete } from "../../../helpers/numbersOfDaysToDelete";
+import AlertMessage from "../../admin/UI/AlertMessage";
 
 import { Form } from "./Form";
 
@@ -26,16 +24,6 @@ export const TakeATurn = () => {
     form,
   } = useTakeATurn(availableDays);
 
-  const isAvailableDay = (date: Date) => {
-    const day = date.getDay();
-
-    const listToDisableDayInNumber = numbersOfDaysToDelete(availableDays);
-
-    const isDayCalendarInListToDisable = listToDisableDayInNumber.includes(day);
-
-    return !isDayCalendarInListToDisable;
-  };
-
   if (errorAvailableDays)
     return <Text>No se pudieron cargar los horarios</Text>;
 
@@ -43,33 +31,20 @@ export const TakeATurn = () => {
     <>
       <Heading>Saca un turno conmigo 😇</Heading>
       {error && (
-        <Stack bgColor="red.300" borderRadius="md" my="4" p="4">
-          <Text color="red.800">{error}</Text>
-        </Stack>
+        <AlertMessage bgColor="red.300" text={error} textColor="red.800" />
       )}
       {success && (
-        <Stack bgColor="green.300" borderRadius="md" my="4" p="4">
-          <Text color="gray.800">{success}</Text>
-        </Stack>
+        <AlertMessage bgColor="green.300" text={success} textColor="gray.800" />
       )}
       <Form
+        availableDays={availableDays}
         form={form}
         hoursPerDay={hoursPerDay}
+        setStartDate={setStartDate}
+        startDate={startDate}
         onInputChange={onInputChange}
         onSubmit={onSubmit}
       />
-      <Stack color="black">
-        {availableDays ? (
-          <DatePicker
-            filterDate={isAvailableDay}
-            minDate={moment().toDate()}
-            selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
-          />
-        ) : (
-          <Text>Obteniendo días disponibles</Text>
-        )}
-      </Stack>
     </>
   );
 };

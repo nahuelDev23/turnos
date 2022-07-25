@@ -18,16 +18,47 @@ export interface IDayInitialState {
   formData: IDaysHours[];
   daysData: IDaysHours[];
   isLoadingFormData: boolean;
+  successUpdateDaysHours: boolean;
+  errorUpdateDaysHours: boolean;
 }
 const DAYINITIALSTATE: IDayInitialState = {
   formData: [],
   daysData: [],
   isLoadingFormData: false,
+  successUpdateDaysHours: false,
+  errorUpdateDaysHours: false,
 };
 
 export const DaysProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(daysReducer, DAYINITIALSTATE);
 
+  const setSuccessUpdateDaysHours = () => {
+    dispatch({
+      type: "SET_SUCCESS_UPDATE_DAYS_HOURS",
+      payload: true,
+    });
+
+    setTimeout(() => {
+      dispatch({
+        type: "SET_SUCCESS_UPDATE_DAYS_HOURS",
+        payload: false,
+      });
+    }, 2000);
+  };
+
+  const setErrorUpdateDaysHours = () => {
+    dispatch({
+      type: "SET_ERROR_UPDATE_DAYS_HOURS",
+      payload: true,
+    });
+
+    setTimeout(() => {
+      dispatch({
+        type: "SET_ERROR_UPDATE_DAYS_HOURS",
+        payload: false,
+      });
+    }, 2000);
+  };
   const removeDay = (day: daysString) => {
     dispatch({
       type: "SET_FORM_DATA",
@@ -83,7 +114,6 @@ export const DaysProvider: FC<Props> = ({ children }) => {
     const response = await fetch("/api/admin/availableDays");
     const availableDaysList: RawAvailableDaysFromDb[] = await response.json();
 
-    // todo ver de sacar fill days data o que hace
     if (availableDaysList) {
       fillFormData(availableDaysList);
 
@@ -99,10 +129,12 @@ export const DaysProvider: FC<Props> = ({ children }) => {
   };
 
   const fillFormData = (data: RawAvailableDaysFromDb[]) => {
-    dispatch({
-      type: "SET_FORM_DATA",
-      payload: formatDataAvailableDays(data),
-    });
+    if (data) {
+      dispatch({
+        type: "SET_FORM_DATA",
+        payload: formatDataAvailableDays(data)!,
+      });
+    }
   };
 
   useEffect(() => {
@@ -116,18 +148,12 @@ export const DaysProvider: FC<Props> = ({ children }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // TODO: poner mensaje success y de error
-        console.log(data.message);
+        if (!data.ok) throw new Error(data.message);
 
-        if (!data.ok) {
-          throw new Error(data.message);
-        }
+        setSuccessUpdateDaysHours();
       })
-      .catch((err) => {
-        console.log(err);
-
-        // setSuccess(null);
-        // setError(err.message);
+      .catch(() => {
+        setErrorUpdateDaysHours();
       });
   };
 

@@ -4,8 +4,6 @@ import { ITurnForm } from "../interface";
 import { numberDayToString } from "../helpers/numberDayToString";
 import { IDaysHours } from "../interface/IAvailableDays";
 
-// todo ver si puedo llamar directamente aca availableDays
-
 export const useTakeATurn = (availableDays: IDaysHours[]) => {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
@@ -52,13 +50,12 @@ export const useTakeATurn = (availableDays: IDaysHours[]) => {
   }, [startDate]);
 
   useEffect(() => {
-    // availableDays !== undefined
     if (availableDays) {
       const currentDay = numberDayToString(startDate.getDay());
 
       const todayHaveHours = availableDays.find(
         (item: IDaysHours) => item.day === currentDay,
-      ) as any;
+      ) as IDaysHours;
 
       if (todayHaveHours) return setHoursPerDay(todayHaveHours.hours);
     }

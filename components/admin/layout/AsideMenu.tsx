@@ -35,6 +35,7 @@ export const AsideMenu = () => {
     <Stack borderRight="1px solid" minH="100vh" p="4" w="200px">
       <Text>{session?.user?.email}</Text>
       <Divider />
+      <ActiveLink path="/" text="Ir al home" />
       <ActiveLink path="/admin" text="Agregar horarios disponibles" />
       <ActiveLink path="/admin/turns" text="Lista de turnos" />
 

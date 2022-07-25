@@ -7,8 +7,8 @@ interface AuthInputs {
   password: string;
 }
 const initialFormAuthValues = {
-  email: "",
-  password: "",
+  email: "nahuel@gmail.com",
+  password: "123456",
 };
 
 export const useLogin = () => {

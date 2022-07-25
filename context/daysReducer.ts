@@ -5,7 +5,9 @@ import { IDayInitialState } from "./DaysProvider";
 type Action =
   | { type: "SET_FORM_DATA"; payload: IDaysHours[] }
   | { type: "SET_DAYS_DATA"; payload: IDaysHours[] }
-  | { type: "LOADING_FORM_DATA"; payload: boolean };
+  | { type: "LOADING_FORM_DATA"; payload: boolean }
+  | { type: "SET_SUCCESS_UPDATE_DAYS_HOURS"; payload: boolean }
+  | { type: "SET_ERROR_UPDATE_DAYS_HOURS"; payload: boolean };
 
 export const daysReducer = (
   state: IDayInitialState,
@@ -30,6 +32,17 @@ export const daysReducer = (
         ...state,
         isLoadingFormData: action.payload,
       };
+    case "SET_SUCCESS_UPDATE_DAYS_HOURS":
+      return {
+        ...state,
+        successUpdateDaysHours: action.payload,
+      };
+    case "SET_ERROR_UPDATE_DAYS_HOURS":
+      return {
+        ...state,
+        errorUpdateDaysHours: action.payload,
+      };
+
     default:
       return state;
   }

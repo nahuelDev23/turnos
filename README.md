@@ -22,3 +22,10 @@ jest.mock("next/router", () => ({
 
     //https://github.com/vercel/next.js/issues/7479#issuecomment-778586840
 ```
+
+mongodb
+nextAuth
+typescript
+jest
+testing library
+chakraui
