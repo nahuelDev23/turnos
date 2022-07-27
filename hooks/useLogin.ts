@@ -27,7 +27,7 @@ export const useLogin = () => {
       redirect: false,
     })) as any;
 
-    if (response.ok) router.push("/admin");
+    if (response.ok) router.reload();
 
     if (!response.ok) setErrorLogin(true);
   };

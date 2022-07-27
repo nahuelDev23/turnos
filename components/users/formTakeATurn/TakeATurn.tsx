@@ -41,17 +41,16 @@ export const TakeATurn = () => {
       {success && (
         <AlertMessage bgColor="green.300" text={success} textColor="gray.800" />
       )}
-      {availableDays && availableDays.length && (
-        <Form
-          availableDays={availableDays}
-          form={form}
-          hoursPerDay={hoursPerDay}
-          setStartDate={setStartDate}
-          startDate={startDate}
-          onInputChange={onInputChange}
-          onSubmit={onSubmit}
-        />
-      )}
+
+      <Form
+        availableDays={availableDays}
+        form={form}
+        hoursPerDay={hoursPerDay}
+        setStartDate={setStartDate}
+        startDate={startDate}
+        onInputChange={onInputChange}
+        onSubmit={onSubmit}
+      />
     </>
   );
 };
