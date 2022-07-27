@@ -9,10 +9,11 @@ interface IBadResponseDaysHours {
   message: string;
 }
 
-export const useTakeATurn = (availableDays: IDaysHours[]) => {
+export const useTakeATurn = () => {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
   const [hoursPerDay, setHoursPerDay] = useState<any>(null);
+  const [availableDays, setAvailableDays] = useState<IDaysHours[]>();
 
   const [startDate, setStartDate] = useState(
     new Date(new Date().setHours(0, 0, 0, 0)),
@@ -78,5 +79,6 @@ export const useTakeATurn = (availableDays: IDaysHours[]) => {
     startDate,
     setStartDate,
     form,
+    setAvailableDays,
   };
 };

@@ -1,5 +1,6 @@
 import { Text, Heading } from "@chakra-ui/react";
 import useSWR from "swr";
+import { useEffect } from "react";
 
 import { useTakeATurn } from "../../../hooks/useTakeATurn";
 import AlertMessage from "../../admin/UI/AlertMessage";
@@ -22,8 +23,12 @@ export const TakeATurn = () => {
     startDate,
     setStartDate,
     form,
-  } = useTakeATurn(availableDays);
+    setAvailableDays,
+  } = useTakeATurn();
 
+  useEffect(() => {
+    setAvailableDays(availableDays);
+  }, [availableDays]);
   if (errorAvailableDays)
     return <Text>No se pudieron cargar los horarios</Text>;
 
@@ -36,15 +41,17 @@ export const TakeATurn = () => {
       {success && (
         <AlertMessage bgColor="green.300" text={success} textColor="gray.800" />
       )}
-      <Form
-        availableDays={availableDays}
-        form={form}
-        hoursPerDay={hoursPerDay}
-        setStartDate={setStartDate}
-        startDate={startDate}
-        onInputChange={onInputChange}
-        onSubmit={onSubmit}
-      />
+      {availableDays && availableDays.length && (
+        <Form
+          availableDays={availableDays}
+          form={form}
+          hoursPerDay={hoursPerDay}
+          setStartDate={setStartDate}
+          startDate={startDate}
+          onInputChange={onInputChange}
+          onSubmit={onSubmit}
+        />
+      )}
     </>
   );
 };

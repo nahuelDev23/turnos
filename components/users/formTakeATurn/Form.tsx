@@ -100,7 +100,7 @@ export const Form: FC<Props> = ({
         </Select>
 
         <Stack color="black">
-          {availableDays ? (
+          {availableDays?.length ? (
             <DatePicker
               filterDate={isAvailableDay}
               minDate={moment().toDate()}
