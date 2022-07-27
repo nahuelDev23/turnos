@@ -9,7 +9,7 @@ const Login = () => {
 
   return (
     <PublicLayout>
-      {errorLogin && <Text>{errorLogin}</Text>}
+      {errorLogin && <Text color="red.200">Credenciales incorrectas</Text>}
       <form onSubmit={onSubmitLogin}>
         <FormLabel htmlFor="email">
           Email
