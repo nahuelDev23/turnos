@@ -1,13 +1,15 @@
-import { Button, Input, FormLabel } from "@chakra-ui/react";
+import { Button, Input, FormLabel, Text } from "@chakra-ui/react";
 
 import { PublicLayout } from "../../components/Layout/PublicLayout";
 import { useLogin } from "../../hooks/useLogin";
 
 const Login = () => {
-  const { onSubmitLogin, email, password, onInputLoginChange } = useLogin();
+  const { onSubmitLogin, email, password, onInputLoginChange, errorLogin } =
+    useLogin();
 
   return (
     <PublicLayout>
+      {errorLogin && <Text>{errorLogin}</Text>}
       <form onSubmit={onSubmitLogin}>
         <FormLabel htmlFor="email">
           Email
